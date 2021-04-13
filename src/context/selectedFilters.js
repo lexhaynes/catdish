@@ -6,52 +6,53 @@ const SelectedFiltersContext = createContext();
 const SelectedFiltersUpdateContext = createContext();
 
 export function SelectedFiltersProvider({ children }) {
-  const [selectedBrands, setSelectedBrands] = useState([]);
-  const [selectedTextures, setSelectedTextures] = useState([]);
-  const [selectedIncludes, setSelectedIncludes] = useState([]);
-  const [selectedExcludes, setSelectedExcludes] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({
+    brand: [],
+    texture: [],
+    include: [],
+    exclude: [],
+  });
+  /*
+    selectedFilters shape: 
+    {
+      brand: [],
+      texture: [],
+      include: [],
+      exclude: []
+    }
+  */
 
   const state = {
-    selectedBrands,
-    selectedTextures,
-    selectedIncludes,
-    selectedExcludes
+    selectedFilters
   };
 
   const updateFns = {
-    //add a filter to one of the lists
-    addBrandFilter: (update) => {
-      if (selectedBrands.includes(update)) return false;
-      setSelectedBrands( prevState => [...prevState, update])
+    //add a filter
+    addFilter: (category, addition) => {
+      //check if filter already exists
+      //if so, return, if not
+      // add filter to list
+      if (category in selectedFilters && selectedFilters[category].includes(addition)) return false;
+
+      setSelectedFilters(prevState => ({
+        ...prevState,
+        [category] : [...prevState[category], addition]
+      }));
+        
     },
-    addTextureFilter: (update) => {
-      if (selectedTextures.includes(update)) return false;
-      setSelectedTextures( prevState => [...prevState, update])
-    },
-    addIncludeFilter: (update) => {
-      if (selectedIncludes.includes(update)) return false;
-      setSelectedIncludes( prevState => [...prevState, update])
-    },
-    addExcludeFilter: (update) => {
-      if (selectedExcludes.includes(update)) return false;
-      setSelectedExcludes( prevState => [...prevState, update])
-    },
+
     //delete a filter
-    deleteBrandFilter: (update) => {
-      if (!selectedBrands.includes(update)) return false;
-      setSelectedBrands( selectedBrands.filter(item => item !== update) )
-    },
-    deleteTextureFilter: (update) => {
-      if (!selectedTextures.includes(update)) return false;
-      setSelectedTextures( selectedTextures.filter(item => item !== update) )
-    },
-    deleteIncludeFilter: (update) => {
-      if (!selectedIncludes.includes(update)) return false;
-      setSelectedIncludes( selectedIncludes.filter(item => item !== update) )
-    },
-    deleteExcludeFilter: (update) => {
-      if (!selectedExcludes.includes(update)) return false;
-      setSelectedExcludes( selectedExcludes.filter(item => item !== update) )
+    deleteFilter: (category, deletion) => {
+      //check if filter is NOT in list already
+      //if so, return, if not
+      //remove filter from list
+      if (!category in selectedFilters || !selectedFilters[category].includes(deletion)) return false;
+      
+      //update category's array of values by creating a copy without the value to be deleted
+      setSelectedFilters(prevState => ({
+        ...prevState,
+        [category] : prevState[category].filter(item => item != deletion)
+      }))
     },
   };
 
