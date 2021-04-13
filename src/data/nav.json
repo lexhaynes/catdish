@@ -1,0 +1,32 @@
+[
+    {
+        "name": "home",
+        "displayName": "Home",
+        "path": "/"
+    },
+    {
+        "name": "brands",
+        "displayName": "Brands",
+        "path": "/brands"
+    },
+    {
+        "name": "textures",
+        "displayName": "Textures",
+        "path": "/textures"
+    },
+    {
+        "name": "excludes",
+        "displayName": "Excludes",
+        "path": "/ingredients/excludes"
+    },
+    {
+        "name": "includes",
+        "displayName":"Includes",
+        "path": "/ingredients/includes"
+    },
+    {
+        "name": "results",
+        "displayName": "Results",
+        "path": "/results"
+    }
+]
