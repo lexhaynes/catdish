@@ -17,12 +17,12 @@
     {
         "name": "excludes",
         "displayName": "Excludes",
-        "path": "/ingredients/excludes"
+        "path": "/excludes"
     },
     {
         "name": "includes",
         "displayName":"Includes",
-        "path": "/ingredients/includes"
+        "path": "/includes"
     },
     {
         "name": "results",

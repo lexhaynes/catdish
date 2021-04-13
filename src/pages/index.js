@@ -4,7 +4,7 @@ import nav from '@data/nav.json'
 
  const Home = () => {
   return (
-    <Page title="CatDish Home">
+    <Page title="Home">
       <h1>Home</h1>
       <ul>
         {

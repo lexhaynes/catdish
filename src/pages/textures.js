@@ -1,20 +1,16 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import Page from '@layouts/page';
+import TabPage from '@layouts/TabPage';
 
- const Brands = ({ data }) => {
+ const Textures = ({ data }) => {
+
   return (
-    <Page title="CatDish: Filter by Textures">
-      <h1>Textures</h1>
-        <ul>
-          {
-            data.map((item, i) => (
-              <li key={`textures_${i}`}>{item}</li>
-            ))
-          } 
-        </ul>
-    </Page>
-  )
+      <TabPage 
+        title="Filter by Texture" 
+        tabName="texture"
+        data={data}
+        />
+    )
 }
 
 /* nextJS utility to retrieve data from database before the page is rendered and return data as component prop */
@@ -31,4 +27,4 @@ export async function getServerSideProps() {
 }
 
 
-export default Brands
+export default Textures

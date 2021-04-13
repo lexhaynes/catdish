@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react'
 import WetFood from '@models/WetFood' */
 import Page from '@layouts/page';
 import SelectedFiltersDisplay from '@components/selectedFiltersDisplay'
+import TabList from '@components/tabList'
 
 
  const Results = () => {
@@ -18,13 +19,9 @@ import SelectedFiltersDisplay from '@components/selectedFiltersDisplay'
       <Page title="CatDish: Results">
         <h1>Results</h1>
 
-        <div>
-          <h2>Selected Filters</h2>
-          
-          <SelectedFiltersDisplay />
- 
-         
-        </div>
+        <SelectedFiltersDisplay />
+
+        <TabList />
         
         { dataLoading 
           ? <div>Loading data...</div>

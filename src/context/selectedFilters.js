@@ -6,10 +6,10 @@ const SelectedFiltersContext = createContext();
 const SelectedFiltersUpdateContext = createContext();
 
 export function SelectedFiltersProvider({ children }) {
-  const [selectedBrands, setSelectedBrands] = useState(["brand"]);
-  const [selectedTextures, setSelectedTextures] = useState(["texture"]);
-  const [selectedIncludes, setSelectedIncludes] = useState(["include"]);
-  const [selectedExcludes, setSelectedExcludes] = useState(["exclude"]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedTextures, setSelectedTextures] = useState([]);
+  const [selectedIncludes, setSelectedIncludes] = useState([]);
+  const [selectedExcludes, setSelectedExcludes] = useState([]);
 
   const state = {
     selectedBrands,
@@ -19,7 +19,40 @@ export function SelectedFiltersProvider({ children }) {
   };
 
   const updateFns = {
-    // when we need to modify the selected filters, register those functions here!!!!
+    //add a filter to one of the lists
+    addBrandFilter: (update) => {
+      if (selectedBrands.includes(update)) return false;
+      setSelectedBrands( prevState => [...prevState, update])
+    },
+    addTextureFilter: (update) => {
+      if (selectedTextures.includes(update)) return false;
+      setSelectedTextures( prevState => [...prevState, update])
+    },
+    addIncludeFilter: (update) => {
+      if (selectedIncludes.includes(update)) return false;
+      setSelectedIncludes( prevState => [...prevState, update])
+    },
+    addExcludeFilter: (update) => {
+      if (selectedExcludes.includes(update)) return false;
+      setSelectedExcludes( prevState => [...prevState, update])
+    },
+    //delete a filter
+    deleteBrandFilter: (update) => {
+      if (!selectedBrands.includes(update)) return false;
+      setSelectedBrands( selectedBrands.filter(item => item !== update) )
+    },
+    deleteTextureFilter: (update) => {
+      if (!selectedTextures.includes(update)) return false;
+      setSelectedTextures( selectedTextures.filter(item => item !== update) )
+    },
+    deleteIncludeFilter: (update) => {
+      if (!selectedIncludes.includes(update)) return false;
+      setSelectedIncludes( selectedIncludes.filter(item => item !== update) )
+    },
+    deleteExcludeFilter: (update) => {
+      if (!selectedExcludes.includes(update)) return false;
+      setSelectedExcludes( selectedExcludes.filter(item => item !== update) )
+    },
   };
 
   return (
@@ -42,7 +75,7 @@ export function useSelectedFiltersState() {
 }
 
 export function useSelectedFiltersUpdate() {
-  const updateFns = React.useContext(SelectedFiltersUpdate);
+  const updateFns = useContext(SelectedFiltersUpdateContext);
 
   if (updateFns === undefined) {
     throw new Error('useSelectedFiltersUpdate must be used within a SelectedFiltersProvider');

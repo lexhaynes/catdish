@@ -1,19 +1,15 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import Page from '@layouts/page';
+import TabPage from '@layouts/tabPage'
+
 
  const Brands = ({ data }) => {
   return (
-    <Page title="CatDish: Filter by Brands">
-        <h1>Brands</h1>
-        <ul>
-          {
-            data.map((item, i) => (
-              <li key={`brands_${i}`}>{item}</li>
-            ))
-          } 
-        </ul>
-    </Page>
+    <TabPage 
+      title="Filter by Brands" 
+      tabName="brand"
+      data={data}
+      />
   )
 }
 

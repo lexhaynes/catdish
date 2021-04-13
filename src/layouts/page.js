@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import Link from 'next/link'
 import navData from '@data/nav.json'
@@ -8,7 +9,7 @@ const Page = ({ title, children }) => {
     return (
       <div>
         <Head>
-          <title>{title}</title>
+          <title>CatDish: {title}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
@@ -27,5 +28,10 @@ const Page = ({ title, children }) => {
     )
   }
 
+  Page.propTypes = {
+    title: PropTypes.string
+}
 
   export default Page
+
+
