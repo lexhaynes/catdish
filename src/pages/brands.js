@@ -1,6 +1,6 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import TabPage from '@layouts/tabPage'
+import TabPage from '@layouts/TabPage'
 
 
  const Brands = ({ data }) => {

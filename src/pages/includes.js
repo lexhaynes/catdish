@@ -1,5 +1,5 @@
 import WetFood from '@models/WetFood'
-import TabPage from '@layouts/tabPage'
+import TabPage from '@layouts/TabPage'
 import { pickSchema } from '@utils/misc'
 
  const Includes = ({data}) => {

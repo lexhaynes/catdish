@@ -1,4 +1,4 @@
-import axios from 'axios'
+import useSWR from 'swr'
 import {useEffect, useState} from 'react'
 import Page from '@layouts/page';
 import SelectedFiltersDisplay from '@components/selectedFiltersDisplay'
@@ -7,23 +7,33 @@ import { useSelectedFiltersState } from '@context/selectedFilters'
 
 const apiPath = '/api/results?';
 
+/* data fetched from server */
 const ResultsData = ({query}) => {
-  const [error, setError] = useState();
-  const [data, setData] = useState();
 
-  axios.get(query)
-    .then((res) => {
-      //success
-      setData(res.data)
-      setError(null)
-    })
-    .catch((e) => {
-      setError(e)
-    })
-
+    const fetcher = url => fetch(url).then(res => res.json())
+    const { data, error } = useSWR(query, fetcher)
+        
     if (error) return <div>failed to load</div>
     if (!data) return <div>loading...</div>
-    return <div>hello {data.name}!</div>
+   console.log("results data: ", data);
+
+    return (
+      <ul>
+        <h3>Results from Server:</h3>
+        {
+          data.map(item => (
+            <li>
+            {
+              Object.keys(item).map(key => (
+                <p> {`${key}: ${item[key]}`}</p>
+                
+              ))
+            }
+            </li>
+          ))
+        }
+      </ul>
+    )
 }
 
 const Results = () => {
@@ -37,7 +47,7 @@ const Results = () => {
     Object.keys(filters).map((key, keyIndex) => (
       filters[key].map( (filter, filterIndex) => (
         //create query string; don't add ampersand after last value in array of last key
-        queryString = queryString.concat(`${encodeURIComponent(key)}=${encodeURIComponent(filter)}${keyIndex < Object.keys(filters).length - 1 && filterIndex < filters[key].length - 1 ?  '&' : ''}`)
+        queryString = queryString.concat(`${encodeURIComponent(key)}=${encodeURIComponent(filter)}&`)
       ))
     ))
 
