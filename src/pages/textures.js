@@ -1,9 +1,8 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import TabPage from '@layouts/TabPage';
+import TabPage from '@layouts/TabPage'
 
  const Textures = ({ data }) => {
-
   return (
       <TabPage 
         title="Filter by Texture" 
@@ -20,11 +19,15 @@ export async function getServerSideProps() {
   //put error handling in here!!!
   const res = await WetFood.distinct('texture')
 
+  if (!data) return {
+    props: {data: []}
+  }
+
   return { 
-    props: { data: res } 
+    props: { data: data } 
   } 
 
 }
 
 
-export default Textures
+export default Textures;

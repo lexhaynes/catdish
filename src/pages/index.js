@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Page from '@layouts/page'
+import Page from '@layouts/Page'
 import nav from '@data/nav.json'
 
  const Home = () => {

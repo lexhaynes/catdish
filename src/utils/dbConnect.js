@@ -7,6 +7,11 @@ async function dbConnect() {
     throw new Error("Database disconnected");
   }
 
+  //already connected
+  if (mongoose.connection.readyState == 1) {
+    return
+  }
+
   return mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

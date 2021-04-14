@@ -1,14 +1,14 @@
 import useSWR from 'swr'
 import {useEffect, useState} from 'react'
-import Page from '@layouts/page';
-import SelectedFiltersDisplay from '@components/selectedFiltersDisplay'
-import TabList from '@components/tabList'
+import Page from '@layouts/Page';
+import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
+import TabNav from '@components/TabNav'
 import { useSelectedFiltersState } from '@context/selectedFilters'
 
 const apiPath = '/api/results?';
 
 /* data fetched from server */
-//TODO: consider sending query to server as request header body instead of URL param
+//TODO: consider hashing query and unhashing on server if the url query gets super long...
 const ResultsData = ({query}) => {
 
     const fetcher = url => fetch(url).then(res => res.json())
@@ -26,11 +26,11 @@ const ResultsData = ({query}) => {
         <h3>Results from Server:</h3>
         <p>Num results: {data.length}</p>
         {
-          data.map(item => (
-            <li>
+          data.map( (item, h) => (
+            <li key={`result_${h}`}>
             {
-              Object.keys(item).map(key => (
-                <p> {`${key}: ${item[key]}`}</p>
+              Object.keys(item).map((key,i) => (
+                <p key={`resultsub_${i}`}> {`${key}: ${item[key]}`}</p>
                 
               ))
             }
@@ -74,7 +74,7 @@ const Results = () => {
 
         <SelectedFiltersDisplay />
 
-        <TabList />
+        <TabNav />
 
         {
           countFilters(selectedFilters) > 0  ? <ResultsData query={query} /> : <p>add some filters!</p>

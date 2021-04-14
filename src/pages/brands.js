@@ -2,7 +2,6 @@ import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
 import TabPage from '@layouts/TabPage'
 
-
  const Brands = ({ data }) => {
   return (
     <TabPage 
@@ -18,10 +17,14 @@ export async function getServerSideProps() {
   await dbConnect()
 
   //put error handling in here!!!
-  const res = await WetFood.distinct('brand')
+  const data = await WetFood.distinct('brand')
+
+  if (!data) return {
+    props: {data: []}
+  }
 
   return { 
-    props: { data: res } 
+    props: { data: data } 
   } 
 
 }
