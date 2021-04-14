@@ -37,7 +37,7 @@ const handler = async (req, res) => {
         if (Array.isArray(exclude)) {
         queryArr.push({$and: exclude.map(item => ( {[item]: "No"} ) )}) 
         } else {
-            queryArr.push( {[include]: "No"} ) 
+            queryArr.push( {[exclude]: "No"} ) 
         }
     }
 

@@ -8,6 +8,7 @@ import { useSelectedFiltersState } from '@context/selectedFilters'
 const apiPath = '/api/results?';
 
 /* data fetched from server */
+//TODO: consider sending query to server as request header body instead of URL param
 const ResultsData = ({query}) => {
 
     const fetcher = url => fetch(url).then(res => res.json())
@@ -15,11 +16,15 @@ const ResultsData = ({query}) => {
         
     if (error) return <div>failed to load</div>
     if (!data) return <div>loading...</div>
-   console.log("results data: ", data);
+
+    if (data.length < 1) return (
+      <p>No results found. Try removing some filters.</p>
+    )
 
     return (
       <ul>
         <h3>Results from Server:</h3>
+        <p>Num results: {data.length}</p>
         {
           data.map(item => (
             <li>
@@ -38,9 +43,9 @@ const ResultsData = ({query}) => {
 
 const Results = () => {
   const [query, setQuery] = useState("");
-  const { selectedFilters} = useSelectedFiltersState();
+  const { selectedFilters } = useSelectedFiltersState();
 
-  //build query
+  //build query from filters
   const generateQueryString = (filters) => {
     let queryString = '';
 
@@ -59,9 +64,9 @@ const Results = () => {
    if (countFilters(selectedFilters) > 0 ) {
       const queryString = generateQueryString(selectedFilters);
       setQuery(queryString);
-      countFilters(selectedFilters);
     }
   }, [selectedFilters])
+
 
   return (
       <Page title="CatDish: Results">
@@ -70,8 +75,9 @@ const Results = () => {
         <SelectedFiltersDisplay />
 
         <TabList />
+
         {
-          query.length > 0 ? <ResultsData query={query} /> : <p>add some filters!</p>
+          countFilters(selectedFilters) > 0  ? <ResultsData query={query} /> : <p>add some filters!</p>
         }
         
 
