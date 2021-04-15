@@ -1,0 +1,22 @@
+// bootstrap - required
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+//bootstrap navbar
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/transitions";
+
+//tailwind required
+@import "~tailwindcss/base";
+@import "~tailwindcss/components";
+@import "~tailwindcss/utilities";
+
+//global styles here
+
+/* for testing */
+.test {
+  @apply border border-green-300;
+}
+

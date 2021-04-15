@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import {useEffect, useState} from 'react'
-import Page from '@layouts/Page';
+import AppShell from '@layouts/AppShell';
 import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
 import TabNav from '@components/TabNav'
 import { useSelectedFiltersState } from '@context/selectedFilters'
@@ -69,7 +69,7 @@ const Results = () => {
 
 
   return (
-      <Page title="CatDish: Results">
+      <AppShell title="CatDish: Results">
         <h1>Results</h1>
 
         <SelectedFiltersDisplay />
@@ -81,7 +81,7 @@ const Results = () => {
         }
         
 
-      </Page>
+      </AppShell>
     )
 }
 

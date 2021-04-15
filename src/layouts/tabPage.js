@@ -1,28 +1,31 @@
 import PropTypes from 'prop-types'
-import Page from '@layouts/Page'
+import AppShell from '@layouts/AppShell'
 import TabNav from '@components/TabNav'
 import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
 import QueryBuilder from '@components/QueryBuilder'
 
-const TabPage = ({title, tabName, data}) => {
+const TabPage = ({ title, tabName, data }) => {
 
 
     return (
-        <Page title={title}>
-            <SelectedFiltersDisplay />
+        <AppShell title={title}>
+            <div>
+                <SelectedFiltersDisplay />
 
-            <TabNav />
+                <TabNav />
 
-            {
-                data && data.length > 0 
-                    ? <QueryBuilder tabName={tabName} optionList={data} /> 
-                    : <div>Problem retrieving data.</div>
-            }
+                {
+                    data && data.length > 0
+                        ? <QueryBuilder tabName={tabName} optionList={data} />
+                        : <div>Problem retrieving data.</div>
+                }
 
-            
 
-            
-        </Page>
+            </div>
+
+
+
+        </AppShell>
     )
 }
 

@@ -13,11 +13,11 @@ import TabPage from '@layouts/TabPage'
 }
 
 /* nextJS utility to retrieve data from database before the page is rendered and return data as component prop */
-export async function getServerSideProps() {
+export async function getStaticProps() {
   await dbConnect()
 
   //put error handling in here!!!
-  const res = await WetFood.distinct('texture')
+  const data = await WetFood.distinct('texture')
 
   if (!data) return {
     props: {data: []}

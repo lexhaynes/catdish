@@ -13,7 +13,7 @@ import TabPage from '@layouts/TabPage'
 }
 
 /* nextJS utility to retrieve data from database before the page is rendered and return data as component prop */
-export async function getServerSideProps() {
+export async function getStaticProps() {
   await dbConnect()
 
   //put error handling in here!!!

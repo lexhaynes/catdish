@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import Page from '@layouts/Page'
+import AppShell from '@layouts/AppShell'
 import nav from '@data/nav.json'
 
  const Home = () => {
   return (
-    <Page title="Home">
+    <AppShell title="Home">
       <h1>Home</h1>
       <ul>
         {
@@ -13,7 +13,7 @@ import nav from '@data/nav.json'
           ))
         }
       </ul>
-    </Page>
+    </AppShell>
   )
 }
 
