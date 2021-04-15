@@ -46,37 +46,40 @@ const SelectedFiltersDisplay = () => {
 
     
     return (
-      <div className="my-4 mx-auto">
+      <>
         <h2 className="text-2xl font-bold tracking-wide mb-5">Current Filters</h2>
+
+        {
+          countFilters() > 0
+          ?   
+            <>
+              <div className="flex space-between flex-wrap my-4">
+                {
+                  Object.keys(selectedFilters).map(key => (
+                    selectedFilters[key].map( (filter, i) => (
+                      <span key={`filter-${key}_${i}`} className="mr-2 mb-2">
+                      
+                      <Button 
+                        variant="pill" 
+                        onClick={ () => deleteFilter(key, filter)}
+                        icon={<>&#215;</>}
+                      >
+                        <FormatBtnLabel category={key} filter={filter} />
+                      </Button>
+
+                      </span>
+                    ))
+                  ))
+                }
+              </div>
+              <Button variant="link" onClick={deleteAllFilters}> 
+                Clear all filters
+              </Button>
+            </>
+          : <div className="font-light italic">Add some filters below</div>
+        }
         
-        <div className="flex space-between flex-wrap my-4">
-          {
-            Object.keys(selectedFilters).map(key => (
-              selectedFilters[key].map( (filter, i) => (
-                <span key={`filter-${key}_${i}`} className="mr-2 mb-2">
-                
-                <Button 
-                  variant="pill" 
-                  onClick={ () => deleteFilter(key, filter)}
-                  icon={<>&#215;</>}
-                >
-                  <FormatBtnLabel category={key} filter={filter} />
-                </Button>
-
-                </span>
-              ))
-            ))
-          }
-        </div>
-
-        {countFilters() > 0 
-        ?    <Button variant="link" onClick={deleteAllFilters}> 
-              Clear all filters
-            </Button>
-        : null}
-     
-
-      </div>
+      </>
     )
 }
 
