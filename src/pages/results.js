@@ -2,7 +2,7 @@ import useSWR from 'swr'
 import {useEffect, useState} from 'react'
 import AppShell from '@layouts/AppShell';
 import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
-import TabNav from '@components/TabNav'
+import TabList from '@components/TabList'
 import { useSelectedFiltersState } from '@context/selectedFilters'
 
 const apiPath = '/api/results?';
@@ -74,7 +74,7 @@ const Results = () => {
 
         <SelectedFiltersDisplay />
 
-        <TabNav />
+        <TabList />
 
         {
           countFilters(selectedFilters) > 0  ? <ResultsData query={query} /> : <p>add some filters!</p>

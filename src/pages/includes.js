@@ -1,11 +1,11 @@
 import WetFood from '@models/WetFood'
-import TabPage from '@layouts/TabPage'
+import Page from '@layouts/Page'
 import { pickSchema } from '@utils/misc'
 
  const Includes = ({data}) => {
 
   return (
-    <TabPage 
+    <Page 
         title="Include Ingredients" 
         tabName="include"
         data={data}

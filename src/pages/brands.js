@@ -1,10 +1,10 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import TabPage from '@layouts/TabPage'
+import Page from '@layouts/Page'
 
  const Brands = ({ data }) => {
   return (
-    <TabPage 
+    <Page 
       title="Filter by Brands" 
       tabName="brand"
       data={data}

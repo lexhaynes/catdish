@@ -1,11 +1,11 @@
 import WetFood from '@models/WetFood'
-import TabPage from '@layouts/TabPage'
+import Page from '@layouts/Page'
 import { pickSchema } from '@utils/misc'
 
  const Excludes = ({data}) => {
 
   return (
-    <TabPage 
+    <Page 
         title="Exclude Ingredients" 
         tabName="exclude"
         data={data}

@@ -33,9 +33,9 @@ const FormatBtnLabel = ({category, filter}) => {
   
   return (
     <>
-      <span className="font-bold">{subject} &nbsp;</span> 
+      <span className="font-semibold">{subject} &nbsp;</span> 
       {verb} 
-      <span className="font-bold">&nbsp;{object}</span>
+      <span className="font-semibold">&nbsp;{object}</span>
     </>
   )
 }
@@ -47,7 +47,7 @@ const SelectedFiltersDisplay = () => {
     
     return (
       <div className="my-4 mx-auto">
-        <h2 className="text-2xl font-bold tracking-wide">Current Filters</h2>
+        <h2 className="text-2xl font-bold tracking-wide mb-5">Current Filters</h2>
         
         <div className="flex space-between flex-wrap my-4">
           {

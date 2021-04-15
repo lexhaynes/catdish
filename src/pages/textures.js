@@ -1,10 +1,10 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import TabPage from '@layouts/TabPage'
+import Page from '@layouts/Page'
 
  const Textures = ({ data }) => {
   return (
-      <TabPage 
+      <Page 
         title="Filter by Texture" 
         tabName="texture"
         data={data}
