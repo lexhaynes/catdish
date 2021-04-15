@@ -1,10 +1,10 @@
 //capitalize first letter of string
-const capitalize = (string) => {
+export const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 //get all the relevant fields from a model
-const pickSchema = (model, excluded) => {
+export const pickSchema = (model, excluded) => {
   var fields = []
 
   model.schema.eachPath(function (path) {
@@ -15,7 +15,4 @@ const pickSchema = (model, excluded) => {
   return fields;
  }
 
-  export {
-    capitalize,
-    pickSchema
-  }
+  

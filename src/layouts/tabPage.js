@@ -6,25 +6,17 @@ import QueryBuilder from '@components/QueryBuilder'
 
 const TabPage = ({ title, tabName, data }) => {
 
-
     return (
         <AppShell title={title}>
-            <div>
-                <SelectedFiltersDisplay />
+            <SelectedFiltersDisplay />
 
-                <TabNav />
+            <TabNav />
 
-                {
-                    data && data.length > 0
-                        ? <QueryBuilder tabName={tabName} optionList={data} />
-                        : <div>Problem retrieving data.</div>
-                }
-
-
-            </div>
-
-
-
+            {
+                data && data.length > 0
+                    ? <QueryBuilder tabName={tabName} optionList={data} />
+                    : <div>Problem retrieving data.</div>
+            }
         </AppShell>
     )
 }

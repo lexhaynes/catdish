@@ -1,33 +1,30 @@
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-import Link from 'next/link'
-import navData from '@data/nav.json'
-import NavBar from '@components/NavBar'
-
+import Navbar from '@components/Navbar'
+import Footer from '@components/Footer'
 
 const AppShell = ({ title, children }) => {
-  const homePath = navData.filter(item => item.name === "home")[0].path;
 
   return (
-    <div className="container sm:container max-w-screen-xl mx-auto">
+    <>
       <Head>
         <title>CatDish: {title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header>
-        <NavBar logo={`logo`} />
-        <Link href={homePath}><a>GO HOME</a></Link>
-      </header>
+      <div className="w-full">
+        <header>
+          <Navbar />
+        </header>
 
-      <main>
-        {children}
-      </main>
+        <main className="sm:container max-w-screen-xl mx-auto my-6">
+          {children}
+        </main>
 
-      <footer>
-        Footer
-        </footer>
-    </div>
+        <Footer />
+      </div>
+
+    </>
   )
 }
 

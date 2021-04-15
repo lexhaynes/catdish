@@ -1,37 +1,82 @@
 import { useSelectedFiltersState, useSelectedFiltersUpdate } from '@context/selectedFilters'
+import Button from '@components/button'
+import {capitalize} from '@utils/misc'
 
-const FilterListDisplay = ({filters}) => {
-    const {deleteFilter} = useSelectedFiltersUpdate();
+//TODO: selected filter btn needs X icon and needs to delete the filter on click!!
 
-    const handleDeleteFilter = (e) => {
-        deleteFilter(e.target.dataset["category"], e.target.dataset["filter"])
+//format the language on the filter button label
+const FormatBtnLabel = ({category, filter}) => {
+  let subject = '';
+  let verb = '';
+  let object = '';
+
+  switch(category) {
+    case "include":
+      subject = "Ingredient";
+      verb = "includes";
+      object = filter;
+    break;
+
+    case "exclude":
+      subject = "Ingredient";
+      verb = "excludes";
+      object = filter;
+    break;
+
+    default:
+      subject = capitalize(category);
+      verb = "is";
+      object = filter;
+    break;
+  }
   
-    }
-
-    return (
-        <>
-            <ul>
-              {
-                Object.keys(filters).map(key => (
-                  filters[key].map( (filter, i) => (
-                    <li key={`filter-${key}_${i}`}>
-                      {`${key} is ${filter}`}<button data-filter={filter} data-category={key} onClick={handleDeleteFilter}>x</button>
-                    </li>
-                  ))
-                ))
-              }
-            </ul>
-        </>
-    )
+  
+  return (
+    <>
+      <span className="font-bold">{subject} &nbsp;</span> 
+      {verb} 
+      <span className="font-bold">&nbsp;{object}</span>
+    </>
+  )
 }
 
 const SelectedFiltersDisplay = () => {
-    const { selectedFilters} = useSelectedFiltersState();
+    const { selectedFilters, countFilters } = useSelectedFiltersState();
+    const { deleteFilter, deleteAllFilters} = useSelectedFiltersUpdate();
+
+    
     return (
-      <>
-        <h2>Selected Filter Display</h2>
-        <FilterListDisplay filters={selectedFilters} />
-      </>
+      <div className="my-4 mx-auto">
+        <h2 className="text-2xl font-bold tracking-wide">Current Filters</h2>
+        
+        <div className="flex space-between flex-wrap my-4">
+          {
+            Object.keys(selectedFilters).map(key => (
+              selectedFilters[key].map( (filter, i) => (
+                <span key={`filter-${key}_${i}`} className="mr-2 mb-2">
+                
+                <Button 
+                  variant="pill" 
+                  onClick={ () => deleteFilter(key, filter)}
+                  icon={<>&#215;</>}
+                >
+                  <FormatBtnLabel category={key} filter={filter} />
+                </Button>
+
+                </span>
+              ))
+            ))
+          }
+        </div>
+
+        {countFilters() > 0 
+        ?    <Button variant="link" onClick={deleteAllFilters}> 
+              Clear all filters
+            </Button>
+        : null}
+     
+
+      </div>
     )
 }
 

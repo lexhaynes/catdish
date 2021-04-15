@@ -23,7 +23,14 @@ export function SelectedFiltersProvider({ children }) {
   */
 
   const state = {
-    selectedFilters
+    selectedFilters,
+    //count the number of filters user has selected
+    countFilters: () => {
+      let count = 0;
+      Object.keys(selectedFilters).map(key => count = count + selectedFilters[key].length )
+      return count;
+    }
+    
   };
 
   const updateFns = {
@@ -54,6 +61,16 @@ export function SelectedFiltersProvider({ children }) {
         [category] : prevState[category].filter(item => item != deletion)
       }))
     },
+
+    //delete all filters
+    deleteAllFilters: () => {
+      setSelectedFilters({
+        brand: [],
+        texture: [],
+        include: [],
+        exclude: [],
+      })
+    }
   };
 
   return (

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { useSelectedFiltersUpdate } from '@context/selectedFilters'
-import navData from '@data/nav.json'
+import { getNavPath } from '@utils/data'
 
 const QueryBuilder = ({tabName, optionList}) => {
     const { addFilter } = useSelectedFiltersUpdate();
@@ -10,7 +10,8 @@ const QueryBuilder = ({tabName, optionList}) => {
        addFilter(tabName, e.target.dataset["filter"])
     }
 
-    const resultsPageLink = navData.filter(nav => nav.name === "results")[0].path;
+    const resultsPageLink = getNavPath("results");
+
 
     return (
         <>

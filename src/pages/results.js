@@ -43,7 +43,7 @@ const ResultsData = ({query}) => {
 
 const Results = () => {
   const [query, setQuery] = useState("");
-  const { selectedFilters } = useSelectedFiltersState();
+  const { selectedFilters, countFilters } = useSelectedFiltersState();
 
   //build query from filters
   const generateQueryString = (filters) => {
@@ -61,7 +61,7 @@ const Results = () => {
 
   //watch the selected filters and update query as necessary
   useEffect(() => {
-   if (countFilters(selectedFilters) > 0 ) {
+   if (countFilters() > 0 ) {
       const queryString = generateQueryString(selectedFilters);
       setQuery(queryString);
     }
@@ -84,14 +84,6 @@ const Results = () => {
       </AppShell>
     )
 }
-
-//count the number of total filters
-const countFilters = (stateObj) => {
-  let count = 0;
-  Object.keys(stateObj).map(key => count = count + stateObj[key].length )
-  return count;
-}
-
 
 
 export default Results

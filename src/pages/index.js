@@ -5,10 +5,9 @@ import nav from '@data/nav.json'
  const Home = () => {
   return (
     <AppShell title="Home">
-      <h1>Home</h1>
       <ul>
         {
-          nav.map((item, i) => (
+          nav.filter(item => item.name !== "home").map((item, i) => (
             <li key={`nav-link_${i}`}><Link href={item.path}><a>{item.displayName}</a></Link></li>
           ))
         }
