@@ -1,0 +1,24 @@
+.button {
+    @apply px-4 py-1 flex justify-between;
+}
+
+.icon {
+    @apply ml-4;
+}
+
+/* button variants */
+.pill {
+    @apply rounded-md bg-gray-100 hover:bg-gray-300 focus:outline-none;
+}
+
+.link {
+    @apply underline font-medium p-0 focus:outline-none hover:text-indigo-500;
+}
+
+.tab {
+   @apply font-medium text-xl border-b-4 border-white hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:bg-gray-50;
+}
+
+.active {
+    @apply border-indigo-500;
+}

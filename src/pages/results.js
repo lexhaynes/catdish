@@ -5,7 +5,7 @@ import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
 import TabList from '@components/TabList'
 import { useSelectedFiltersState } from '@context/selectedFilters'
 
-const apiPath = '/api/results?';
+const apiPath = '/api/filters?';
 
 /* data fetched from server */
 //TODO: consider hashing query and unhashing on server if the url query gets super long...
