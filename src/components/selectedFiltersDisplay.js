@@ -2,7 +2,6 @@ import { useSelectedFiltersState, useSelectedFiltersUpdate } from '@context/sele
 import Button from '@components/button'
 import {capitalize} from '@utils/misc'
 
-//TODO: selected filter btn needs X icon and needs to delete the filter on click!!
 
 //format the language on the filter button label
 const FormatBtnLabel = ({category, filter}) => {
@@ -44,6 +43,7 @@ const SelectedFiltersDisplay = () => {
     const { selectedFilters, countFilters } = useSelectedFiltersState();
     const { deleteFilter, deleteAllFilters} = useSelectedFiltersUpdate();
 
+    console.log("selectedFilterDIsplay: selectedFilters: ", selectedFilters);
     
     return (
       <>

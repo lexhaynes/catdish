@@ -1,8 +1,6 @@
 import useSWR from 'swr'
 import {useEffect, useState} from 'react'
-import AppShell from '@layouts/AppShell';
-import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
-import TabList from '@components/TabList'
+import TabPage from '@layouts/TabPage'
 import { useSelectedFiltersState } from '@context/selectedFilters'
 
 const apiPath = '/api/filters?';
@@ -10,7 +8,7 @@ const apiPath = '/api/filters?';
 /* data fetched from server */
 //TODO: consider hashing query and unhashing on server if the url query gets super long...
 const ResultsData = ({query}) => {
-
+  console.log("query is: " + query);
     const fetcher = url => fetch(url).then(res => res.json())
     const { data, error } = useSWR(query, fetcher)
         
@@ -43,45 +41,27 @@ const ResultsData = ({query}) => {
 
 const Results = () => {
   const [query, setQuery] = useState("");
-  const { selectedFilters, countFilters } = useSelectedFiltersState();
+  const { selectedFilters, countFilters, serializeFilters } = useSelectedFiltersState();
 
-  //build query from filters
-  const generateQueryString = (filters) => {
-    let queryString = '';
-
-    Object.keys(filters).map((key, keyIndex) => (
-      filters[key].map( (filter, filterIndex) => (
-        //create query string; don't add ampersand after last value in array of last key
-        queryString = queryString.concat(`${encodeURIComponent(key)}=${encodeURIComponent(filter)}&`)
-      ))
-    ))
-
-    return apiPath+queryString;
-  }
 
   //watch the selected filters and update query as necessary
   useEffect(() => {
    if (countFilters() > 0 ) {
-      const queryString = generateQueryString(selectedFilters);
-      setQuery(queryString);
+      setQuery(apiPath + serializeFilters());
     }
   }, [selectedFilters])
 
 
   return (
-      <AppShell title="CatDish: Results">
-        <h1>Results</h1>
+      <TabPage title="CatDish: Results">
 
-        <SelectedFiltersDisplay />
-
-        <TabList />
 
         {
           countFilters(selectedFilters) > 0  ? <ResultsData query={query} /> : <p>add some filters!</p>
         }
         
 
-      </AppShell>
+      </TabPage>
     )
 }
 

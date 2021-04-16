@@ -3,6 +3,27 @@ import Link from 'next/link'
 import { useSelectedFiltersUpdate } from '@context/selectedFilters'
 import { getNavPath } from '@utils/data'
 
+//format the language on the filter button label
+const Heading = ({category}) => {
+
+    if (category === "brand" || category === "texture" ) {
+        return (
+            <div className="my-6">
+                <h2 className="text-2xl font-bold mb-2">I want to filter by {category} </h2>
+                <h4 className="text-l font-medium">Results will match <span className="underline">one or more</span> of the {category}s you select</h4>
+            </div>
+        )
+    }
+
+    return (
+        <div className="my-6">
+            <h2 className="text-2xl font-bold mb-2">I want to {category} ingredients </h2>
+            <h4 className="text-l font-medium">Results will {category} <span className="underline">all of</span> the ingredients you select</h4>
+        </div>
+    )
+    
+  }
+
 const QueryBuilder = ({tabName, optionList}) => {
     const { addFilter } = useSelectedFiltersUpdate();
 
@@ -10,12 +31,12 @@ const QueryBuilder = ({tabName, optionList}) => {
        addFilter(tabName, e.target.dataset["filter"])
     }
 
-    const resultsPageLink = getNavPath("results");
+    const resultsTabPageLink = getNavPath("results");
 
 
     return (
         <>
-            <h2>I want to pick a {tabName}</h2>
+            <Heading category={tabName} />
             <p>SearchBar TBD</p>
             <p>OptionListHeader TBD</p>
             <ul>
@@ -29,7 +50,7 @@ const QueryBuilder = ({tabName, optionList}) => {
             </ul>    
             <div>
                 <button>
-                    <Link href={resultsPageLink}>Get Results</Link>
+                    <Link href={resultsTabPageLink}>Get Results</Link>
                 </button>
             </div>   
               

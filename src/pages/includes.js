@@ -1,17 +1,19 @@
 import WetFood from '@models/WetFood'
-import Page from '@layouts/Page'
+import FilterPage from '@layouts/FilterPage'
 import { pickSchema } from '@utils/misc'
+const FILTER_NAME = "include";
 
- const Includes = ({data}) => {
 
-  return (
-    <Page 
+const Includes = ({data}) => {
+    return (
+      <FilterPage 
         title="Include Ingredients" 
-        tabName="include"
+        filterName={FILTER_NAME}
         data={data}
-    />
-  )
+      />
+    )
 }
+
 
 //load data as prop server-side before page is rendered
 export function getStaticProps() {

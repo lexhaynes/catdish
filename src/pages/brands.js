@@ -1,14 +1,15 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import Page from '@layouts/Page'
+import FilterPage from '@layouts/FilterPage'
+const FILTER_NAME = "brand";
 
- const Brands = ({ data }) => {
+const Brands = ({ data }) => {
   return (
-    <Page 
-      title="Filter by Brands" 
-      tabName="brand"
+    <FilterPage 
+      title="Filter by brand" 
+      filterName={FILTER_NAME}
       data={data}
-      />
+    />
   )
 }
 
@@ -17,7 +18,7 @@ export async function getStaticProps() {
   await dbConnect()
 
   //put error handling in here!!!
-  const data = await WetFood.distinct('brand')
+  const data = await WetFood.distinct(FILTER_NAME)
 
   if (!data) return {
     props: {data: []}

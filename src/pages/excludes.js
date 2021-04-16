@@ -1,15 +1,17 @@
 import WetFood from '@models/WetFood'
-import Page from '@layouts/Page'
+import FilterPage from '@layouts/FilterPage'
 import { pickSchema } from '@utils/misc'
+const FILTER_NAME = "exclude";
 
- const Excludes = ({data}) => {
+
+const Excludes = ({data}) => {
 
   return (
-    <Page 
-        title="Exclude Ingredients" 
-        tabName="exclude"
-        data={data}
-        />
+    <FilterPage 
+      title="Exclude Ingredients" 
+      filterName={FILTER_NAME}
+      data={data}
+    />
   )
 }
 

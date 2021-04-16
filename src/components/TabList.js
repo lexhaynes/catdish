@@ -9,10 +9,11 @@ const TabList = ({activeTab, tabs}) => {
                 tabs.map((tab, i) => (
                     <span key={`tablist_${i}`} className="mr-2">
                         <Link href={tab.path} passHref>
+                            <a>
                             <Button variant="tab" active={tab.name === activeTab}>
-
                                 {tab.displayName}
                             </Button>
+                            </a>
                         </Link>
                     </span>
                 ))  
@@ -25,11 +26,12 @@ const TabList = ({activeTab, tabs}) => {
 
 TabList.propTypes = {
     activeTab: PropTypes.string.isRequired,
-    tabs: PropTypes.arrayOf(PropTypes.shape({
+     tabs: PropTypes.arrayOf(PropTypes.shape({
       path: PropTypes.string.isRequired,
       displayName: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     })).isRequired,
- }
+ } 
 
 
 export default TabList

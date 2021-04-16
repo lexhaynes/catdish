@@ -3,7 +3,6 @@ import dbConnect from '@utils/dbConnect';
 
 const handler = async (req, res) => {
 
-   // console.log("req.query: ", req.query);
 
     const { texture, brand, include, exclude } = req.query;
 

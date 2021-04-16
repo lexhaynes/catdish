@@ -12,6 +12,8 @@ export function SelectedFiltersProvider({ children }) {
     include: [],
     exclude: [],
   });
+
+  console.log("context ", selectedFilters);
   /*
     selectedFilters shape: 
     {
@@ -27,8 +29,32 @@ export function SelectedFiltersProvider({ children }) {
     //count the number of filters user has selected
     countFilters: () => {
       let count = 0;
-      Object.keys(selectedFilters).map(key => count = count + selectedFilters[key].length )
+      for (let key in selectedFilters) {
+        if (selectedFilters[key]) {
+          count = count + selectedFilters[key].length
+        }
+      }
       return count;
+    },
+    // convert state object into query string
+    serializeFilters: () => {
+      let queryString = '';
+
+      if (state.countFilters() > 0) {
+        for (let category in selectedFilters) {
+          for (let i = 0; i < selectedFilters[category].length; i++) {
+            const filter = selectedFilters[category][i];
+            //TODO: don't add ampersand after last value in array of last key
+            queryString = queryString.concat(`${encodeURIComponent(category)}=${encodeURIComponent(filter)}&`)
+          }
+        }
+      }
+      let result;
+      //remove last ampersand
+      if (queryString.charAt(queryString.length - 1 === "&")) {
+        result = queryString.slice(0, queryString.length - 1)
+      }
+      return result;
     }
     
   };

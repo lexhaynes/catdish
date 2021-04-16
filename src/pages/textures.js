@@ -1,23 +1,23 @@
 import dbConnect from '@utils/dbConnect'
 import WetFood from '@models/WetFood'
-import Page from '@layouts/Page'
+import FilterPage from '@layouts/FilterPage'
+const FILTER_NAME = "texture";
 
  const Textures = ({ data }) => {
   return (
-      <Page 
-        title="Filter by Texture" 
-        tabName="texture"
-        data={data}
-        />
-    )
+    <FilterPage 
+      title="Filter by Texture" 
+      filterName={FILTER_NAME}
+      data={data}
+    />
+  )
 }
-
 /* nextJS utility to retrieve data from database before the page is rendered and return data as component prop */
 export async function getStaticProps() {
   await dbConnect()
 
   //put error handling in here!!!
-  const data = await WetFood.distinct('texture')
+  const data = await WetFood.distinct(FILTER_NAME)
 
   if (!data) return {
     props: {data: []}
