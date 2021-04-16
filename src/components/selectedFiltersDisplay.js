@@ -43,7 +43,6 @@ const SelectedFiltersDisplay = () => {
     const { selectedFilters, countFilters } = useSelectedFiltersState();
     const { deleteFilter, deleteAllFilters} = useSelectedFiltersUpdate();
 
-    console.log("selectedFilterDIsplay: selectedFilters: ", selectedFilters);
     
     return (
       <>
