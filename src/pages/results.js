@@ -1,5 +1,6 @@
 import useSWR from 'swr'
 import {useEffect, useState} from 'react'
+import {useRouter} from 'next/router'
 import TabPage from '@layouts/TabPage'
 import { useSelectedFiltersState } from '@context/selectedFilters'
 
@@ -8,8 +9,8 @@ const apiPath = '/api/filters?';
 /* data fetched from server */
 //TODO: consider hashing query and unhashing on server if the url query gets super long...
 const ResultsData = ({query}) => {
-  console.log("query is: " + query);
-    const fetcher = url => fetch(url).then(res => res.json())
+
+  const fetcher = url => fetch(url).then(res => res.json())
     const { data, error } = useSWR(query, fetcher)
         
     if (error) return <div>failed to load</div>
@@ -42,14 +43,17 @@ const ResultsData = ({query}) => {
 const Results = () => {
   const [query, setQuery] = useState("");
   const { selectedFilters, countFilters, serializeFilters } = useSelectedFiltersState();
-
+  const router = useRouter();
 
   //watch the selected filters and update query as necessary
-  useEffect(() => {
+/*    useEffect(() => {
    if (countFilters() > 0 ) {
-      setQuery(apiPath + serializeFilters());
+      setQuery(apiPath + serializeFilters(selectedFilters));
     }
-  }, [selectedFilters])
+  }, [selectedFilters])  */
+
+  //set the filters based on the URLQuery
+
 
 
   return (

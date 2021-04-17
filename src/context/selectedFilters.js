@@ -37,13 +37,13 @@ export function SelectedFiltersProvider({ children }) {
       return count;
     },
     // convert state object into query string
-    serializeFilters: () => {
+    serializeFilters: (filters) => {
       let queryString = '';
 
       if (state.countFilters() > 0) {
-        for (let category in selectedFilters) {
-          for (let i = 0; i < selectedFilters[category].length; i++) {
-            const filter = selectedFilters[category][i];
+        for (let category in filters) {
+          for (let i = 0; i < filters[category].length; i++) {
+            const filter = filters[category][i];
             //TODO: don't add ampersand after last value in array of last key
             queryString = queryString.concat(`${encodeURIComponent(category)}=${encodeURIComponent(filter)}&`)
           }
