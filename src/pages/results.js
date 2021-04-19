@@ -18,7 +18,7 @@ const ResultsData = ({query}) => {
     if (!data) return <div>loading...</div>
 
     if (data.length < 1) return (
-      <p>No results found. Try removing some filters.</p>
+      <p className="italic">No results found. Try removing some filters.</p>
     )
 
     return (
@@ -53,7 +53,7 @@ const Results = () => {
 
 
         {
-          filterCount > 0  ? <ResultsData query={filterQuery} /> : <p>add some filters!</p>
+          filterCount > 0  ? <ResultsData query={filterQuery} /> : <p className="italic">Add some filters!</p>
         }
         
 

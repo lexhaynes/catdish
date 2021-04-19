@@ -47,9 +47,6 @@ const SelectedFiltersDisplay = () => {
     const { readOnlyFilters, filterCount } = useSelectedFiltersState();
     const { deleteFilter, deleteAllFilters } = useSelectedFiltersUpdate();
 
-    console.log("SelectedFiltersDisplay filters ", readOnlyFilters);
-    console.log(" filterCount ", filterCount);
-
     return (
       <>
         <h2 className="text-2xl font-bold tracking-wide mb-5">Current Filters</h2>
