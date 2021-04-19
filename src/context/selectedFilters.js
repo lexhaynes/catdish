@@ -19,12 +19,12 @@ export function SelectedFiltersProvider({ children }) {
 
   //when URL changes, update the filterCount
   useEffect(() => {     
-    setFilterCount(() => state.countFilters());
     setReadOnlyFilters(() => state.getFiltersFromUrl())
   }, [router.query])
 
   useEffect(() => {
     setFilterQuery(() => state.getQueryFromFilters())
+    setFilterCount(() => state.countFilters());
   }, [readOnlyFilters])
 
 
