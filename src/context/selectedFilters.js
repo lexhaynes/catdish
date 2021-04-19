@@ -1,4 +1,7 @@
-import { createContext, useContext, useState } from 'react';
+import querystring from 'querystring'
+import { createContext, useContext, useState, useEffect } from 'react';
+import {useRouter} from 'next/router'
+import filterData from '@data/filters.json'
 
 /* example here: https://github.com/netlify/explorers/blob/main/src/context/missions.js */
 
@@ -6,97 +9,102 @@ const SelectedFiltersContext = createContext();
 const SelectedFiltersUpdateContext = createContext();
 
 export function SelectedFiltersProvider({ children }) {
-  const [selectedFilters, setSelectedFilters] = useState({
-    brand: [],
-    texture: [],
-    include: [],
-    exclude: [],
-  });
 
-  console.log("context ", selectedFilters);
-  /*
-    selectedFilters shape: 
-    {
-      brand: [],
-      texture: [],
-      include: [],
-      exclude: []
-    }
-  */
+  const [readOnlyFilters, setReadOnlyFilters] = useState('');
+  const [filterCount, setFilterCount] = useState(0);
+  const [filterQuery, setFilterQuery] = useState('');
+  
+  const router = useRouter()
+
+
+  //when URL changes, update the filterCount
+  useEffect(() => {     
+    setFilterCount(() => state.countFilters());
+    setReadOnlyFilters(() => state.getFiltersFromUrl())
+  }, [router.query])
+
+  useEffect(() => {
+    setFilterQuery(() => state.getQueryFromFilters())
+  }, [readOnlyFilters])
+
 
   const state = {
-    selectedFilters,
+    readOnlyFilters, //<-- exporting this as an easier way to access filters than parsing the URL
+    filterCount,
+    filterQuery,
+    //convert the selectedFilters into URL string
+    getQueryFromFilters: () => {
+      return querystring.stringify(readOnlyFilters);
+    },
     //count the number of filters user has selected
     countFilters: () => {
       let count = 0;
-      for (let key in selectedFilters) {
-        if (selectedFilters[key]) {
-          count = count + selectedFilters[key].length
-        }
+      for (let key in readOnlyFilters) {
+        count = count + readOnlyFilters[key].length
       }
       return count;
     },
-    // convert state object into query string
-    serializeFilters: (filters) => {
-      let queryString = '';
-
-      if (state.countFilters() > 0) {
-        for (let category in filters) {
-          for (let i = 0; i < filters[category].length; i++) {
-            const filter = filters[category][i];
-            //TODO: don't add ampersand after last value in array of last key
-            queryString = queryString.concat(`${encodeURIComponent(category)}=${encodeURIComponent(filter)}&`)
+    getFiltersFromUrl: () => {
+      //make sure query filters match acceptable filters 
+      let filters = {};
+      for (let key in router.query) {
+        if (filterData.filters.includes(key)) { //check if the query param is in our master list of filters
+          const val = router.query[key];
+          if (val.length > 0 ) {
+            filters[key] = typeof val === "string"
+              ? [router.query[key]]
+              : [...new Set(val)] //assume val is an array!!!; add val as a Set to ensure no duplication 
           }
+
         }
       }
-      let result;
-      //remove last ampersand
-      if (queryString.charAt(queryString.length - 1 === "&")) {
-        result = queryString.slice(0, queryString.length - 1)
-      }
-      return result;
-    }
-    
+      return filters;
+    },   
   };
 
   const updateFns = {
-    //add a filter
-    addFilter: (category, addition) => {
-      //check if filter already exists
-      //if so, return, if not
-      // add filter to list
-      if (category in selectedFilters && selectedFilters[category].includes(addition)) return false;
+    //add a filter to the URL
+    //addition is a string
+     addFilter: (category, addition) => {
+      //check if addition already exists
+      if (readOnlyFilters[category] && readOnlyFilters[category].includes(addition)) return;
 
-      setSelectedFilters(prevState => ({
-        ...prevState,
-        [category] : [...prevState[category], addition]
-      }));
-        
-    },
+      //if category does not exist, let's add it + vals to URL
+      let newQuery;
+      if (!(category in readOnlyFilters)) {
+        newQuery = {...readOnlyFilters, [category]: addition }
+      } //otherwise, insert addition as a set to avoid dupes
+      else {
+        const updatedVal = [ ...readOnlyFilters[category], addition]
+        newQuery = {...readOnlyFilters, [category]: [...new Set(updatedVal)] }
+      }
+         
+       //update the url
+       router.push(router.pathname+`/?` + querystring.stringify(newQuery), undefined, {scroll:false, shallow:true})
+    }, 
 
-    //delete a filter
+    //delete a filter from URL
     deleteFilter: (category, deletion) => {
-      //check if filter is NOT in list already
-      //if so, return, if not
-      //remove filter from list
-      if (!category in selectedFilters || !selectedFilters[category].includes(deletion)) return false;
-      
-      //update category's array of values by creating a copy without the value to be deleted
-      setSelectedFilters(prevState => ({
-        ...prevState,
-        [category] : prevState[category].filter(item => item != deletion)
-      }))
-    },
 
-    //delete all filters
+      //delete the filter from the URL
+      let updatedVals = {}
+      if (router.query[category]) {
+        updatedVals = Array.isArray(router.query[category])
+                      ? router.query[category].filter(val => val !== deletion)
+                      : [] //<-- set to empty array if the query's key value is a string (which means there is only one value)
+      }
+
+      let newQuery = {...router.query, [category]: updatedVals}
+  
+
+      //update the url
+      router.push(router.pathname+`/?` + querystring.stringify(newQuery), undefined, {scroll:false, shallow:true})
+
+    },
+    //delete all filters from the URL
     deleteAllFilters: () => {
-      setSelectedFilters({
-        brand: [],
-        texture: [],
-        include: [],
-        exclude: [],
-      })
-    }
+      router.push(router.pathname+`/`);
+    } 
   };
 
   return (

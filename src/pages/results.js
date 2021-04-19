@@ -1,17 +1,18 @@
 import useSWR from 'swr'
-import {useEffect, useState} from 'react'
-import {useRouter} from 'next/router'
 import TabPage from '@layouts/TabPage'
 import { useSelectedFiltersState } from '@context/selectedFilters'
+import PropTypes from 'prop-types';
 
 const apiPath = '/api/filters?';
 
 /* data fetched from server */
 //TODO: consider hashing query and unhashing on server if the url query gets super long...
 const ResultsData = ({query}) => {
+  const endpoint = apiPath+query;
+  console.log("ResultsData endpoint: ", endpoint);
 
   const fetcher = url => fetch(url).then(res => res.json())
-    const { data, error } = useSWR(query, fetcher)
+    const { data, error } = useSWR(endpoint, fetcher)
         
     if (error) return <div>failed to load</div>
     if (!data) return <div>loading...</div>
@@ -40,28 +41,19 @@ const ResultsData = ({query}) => {
     )
 }
 
+ResultsData.propTypes = {
+  query: PropTypes.string.isRequired,
+}
+
 const Results = () => {
-  const [query, setQuery] = useState("");
-  const { selectedFilters, countFilters, serializeFilters } = useSelectedFiltersState();
-  const router = useRouter();
-
-  //watch the selected filters and update query as necessary
-/*    useEffect(() => {
-   if (countFilters() > 0 ) {
-      setQuery(apiPath + serializeFilters(selectedFilters));
-    }
-  }, [selectedFilters])  */
-
-  //set the filters based on the URLQuery
-
-
+  const { filterQuery, filterCount } = useSelectedFiltersState();
 
   return (
       <TabPage title="CatDish: Results">
 
 
         {
-          countFilters(selectedFilters) > 0  ? <ResultsData query={query} /> : <p>add some filters!</p>
+          filterCount > 0  ? <ResultsData query={filterQuery} /> : <p>add some filters!</p>
         }
         
 

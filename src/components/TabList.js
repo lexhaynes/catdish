@@ -1,14 +1,17 @@
+import querystring from 'querystring'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import Button from '@components/Button'
+import { useRouter } from 'next/router'
 
 const TabList = ({activeTab, tabs}) => {
+    const router = useRouter();
      return (
         <div className="flex border-b border-gray-300">  
             {
                 tabs.map((tab, i) => (
                     <span key={`tablist_${i}`} className="mr-2">
-                        <Link href={tab.path} passHref>
+                        <Link href={tab.path + '/?' + querystring.stringify(router.query)} passHref>
                             <a>
                             <Button variant="tab" active={tab.name === activeTab}>
                                 {tab.displayName}
