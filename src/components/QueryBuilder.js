@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { SearchIcon } from '@heroicons/react/solid'
 import { CheckCircleIcon } from '@heroicons/react/outline'
 import Button from '@components/Button'
-import { useSelectedFiltersUpdate } from '@context/selectedFilters'
+import { useSelectedFiltersUpdate, useSelectedFiltersState } from '@context/selectedFilters'
 import { getNavPath } from '@utils/data'
 
 const headingStyles = "text-2xl font-bold mb-2";
@@ -49,9 +49,12 @@ const SearchBar = ({searchInput, handleChange}) => {
 }
 
 //TODO: set card as selected or not based on the URL!!
-const Card = ({category, filter, children}) => {
+const Card = ({category, filter, isSelected, children}) => {
     const [selected, setSelected] = useState(false);
     const { addFilter, deleteFilter } = useSelectedFiltersUpdate();
+
+    //set selected with prop value & re-render every time prop val changes!
+    useEffect(() =>  setSelected(isSelected))
 
     const updateSelected = () => {
         setSelected(!selected)
@@ -81,7 +84,8 @@ const Card = ({category, filter, children}) => {
     )
 }
 
-const OptionList = ({category, options}) => {
+const OptionList = ({category, options, clearSearch}) => {
+    const { readOnlyFilters } = useSelectedFiltersState();
 
 //see: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-groupedByFirstLetter-by-their-first-char
 //group options into alphabetized sections; return an object where the key is "0-9" or letter of alphabet, and value is array of options
@@ -106,13 +110,14 @@ const groupedByFirstLetter = options
                                 <h3 className="m-3 text-3xl text-indigo-500 font-extrabold">{letter}</h3>
                                 <div className="flex flex-wrap ">
                                 {
-                                    optionList.map((filter, j) => (
-                                        <div key={`${category}_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
-                                            <Card category={category} filter={filter} >
-                                                {filter}
-                                            </Card>
-                                        </div>
-                                    ))
+                                    optionList.map((filter, j) => {
+                                        const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
+                                        return <div key={`${category}_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
+                                                <Card category={category} filter={filter} isSelected={isSelected} >
+                                                    {filter}
+                                                </Card>
+                                            </div>
+                                    })
                                 }
                                 </div>
                             </div>
@@ -130,32 +135,6 @@ const groupedByFirstLetter = options
             </Button>
         </>
     )
-
-/* 
-    return (
-        <div className="flex flex-wrap">
-        {
-            options.length > 0 
-            ? options.map((item, i) => {
-                return (
-                    <>
-                    <div key={`${category}_${i}`} className="mr-3 w-full sm:w-1/3 md:w-1/4">
-                        <Card category={category} filter={item} >
-                            {item}
-                        </Card>
-                    </div>
-                    </>
-                )
-            })
-            :   <>
-                    <p className="italic">No results match your search.</p>
-                    <Button variant="link" onClick={() => clearSearch()}> 
-                        Clear search terms
-                    </Button>
-                </>
-        } 
-        </div> 
-    ) */
 }
 
 const QueryBuilder = ({tabName, optionList}) => {
@@ -185,12 +164,12 @@ const QueryBuilder = ({tabName, optionList}) => {
     return (
         <>
             <Heading category={tabName} />
-            <SearchBar searchInput={searchInput} handleChange={handleSearch} />
+            <SearchBar searchInput={searchInput} handleChange={handleSearch}/>
 
             <h4 className={subheadStyles}>Select your {tabName}s</h4>
 
            
-            <OptionList category={tabName} options={filteredOptions} />
+            <OptionList category={tabName} options={filteredOptions} clearSearch={clearSearch}  />
 
             <div>
                 <button>

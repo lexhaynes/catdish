@@ -56,7 +56,8 @@ const SelectedFiltersDisplay = () => {
           ?   
             <>
               <div className="flex space-between flex-wrap my-4">
-               {
+
+               { /* TODO neaten this up */
                   Object.keys(readOnlyFilters).map(key => {
                     if (Array.isArray(readOnlyFilters[key])) {
 
