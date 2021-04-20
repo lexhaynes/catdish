@@ -6,6 +6,7 @@ import { CheckCircleIcon } from '@heroicons/react/outline'
 import Button from '@components/Button'
 import { useSelectedFiltersUpdate, useSelectedFiltersState } from '@context/selectedFilters'
 import { getNavPath } from '@utils/data'
+import { capitalize } from '@utils/misc'
 
 const headingStyles = "text-2xl font-bold mb-2";
 const subheadStyles = "text-md font-medium";
@@ -37,7 +38,7 @@ const SearchBar = ({searchInput, handleChange}) => {
      <div className="relative my-6 text-gray-600 h-10 w-1/2">
         <input className="border border-gray-400 bg-white w-full h-full px-4 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:border-2"
           name="search" 
-          placeholder="Search" 
+          placeholder={`Search the filters`} 
           value={searchInput} 
           onChange={handleChange} 
         />
@@ -104,25 +105,23 @@ const groupedByFirstLetter = options
             <>
             {
                 Object.entries(groupedByFirstLetter)
-                    .map(([letter, optionList], i) => { //<-- note: the array here is a destructuring of the Object.entries() return val, which is an array; the first val is groupedByFirstLetter's KEY; the second val is groupedByFirstLetter[key], which is an array 
-                        return (
-                            <div key={`${category}wrapper_${i}`}>
-                                <h3 className="m-3 text-3xl text-indigo-500 font-extrabold">{letter}</h3>
-                                <div className="flex flex-wrap ">
-                                {
-                                    optionList.map((filter, j) => {
-                                        const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
-                                        return <div key={`${category}_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
-                                                <Card category={category} filter={filter} isSelected={isSelected} >
-                                                    {filter}
-                                                </Card>
-                                            </div>
-                                    })
-                                }
-                                </div>
+                    .map(([letter, optionList], i) => ( //<-- note: the array here is a destructuring of the Object.entries() return val, which is an array; the first val is groupedByFirstLetter's KEY; the second val is groupedByFirstLetter[key], which is an array 
+                        <div key={`${category}wrapper_${i}`}>
+                            <h3 className="m-3 text-3xl text-indigo-500 font-extrabold">{letter.toUpperCase()}</h3>
+                            <div className="flex flex-wrap ">
+                            {
+                                optionList.map((filter, j) => {
+                                    const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
+                                    return <div key={`${category}_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
+                                            <Card category={category} filter={filter} isSelected={isSelected} >
+                                                {capitalize(filter).replace(/_/g, " ")}
+                                            </Card>
+                                        </div>
+                                })
+                            }
                             </div>
-                        )
-                    })
+                        </div>
+                    ))
             }
             </>
         )   
@@ -171,10 +170,10 @@ const QueryBuilder = ({tabName, optionList}) => {
            
             <OptionList category={tabName} options={filteredOptions} clearSearch={clearSearch}  />
 
-            <div>
-                <button>
+            <div className="mx-auto my-12">
+                <Button>
                     <Link href={resultsTabPageLink}>Get Results</Link>
-                </button>
+                </Button>
             </div>   
               
             

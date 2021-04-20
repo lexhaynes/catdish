@@ -1,5 +1,5 @@
 .button {
-    @apply px-4 py-1 flex justify-between;
+    @apply px-4 py-1 flex justify-between focus:outline-none;
 }
 
 .icon {
@@ -7,16 +7,19 @@
 }
 
 /* button variants */
+.primary {
+    @apply rounded-sm px-5 py-3 bg-gray-700 text-white hover:bg-gray-400;
+}
 .pill {
-    @apply rounded-md bg-gray-100 hover:bg-gray-300 focus:outline-none;
+    @apply rounded-md bg-gray-100 hover:bg-gray-300;
 }
 
 .link {
-    @apply underline font-medium p-0 focus:outline-none hover:text-indigo-500;
+    @apply underline font-medium p-0 hover:text-indigo-500;
 }
 
 .tab {
-   @apply font-medium text-xl border-b-4 border-white hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:bg-gray-50;
+   @apply font-medium text-xl border-b-4 border-white hover:border-indigo-500 focus:border-indigo-500 focus:bg-gray-50;
 }
 
 .active {

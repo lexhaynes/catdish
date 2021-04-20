@@ -21,7 +21,7 @@ const Button = ({
             <button 
                 type="button" 
                 onClick={onClick} 
-                className={`${style.button} ${style[variant]}`}
+                className={`${style.button} ${style[variant || 'primary']}`}
             >
                 {children}
                 <span className={style.icon}>{icon}</span> 
@@ -32,7 +32,7 @@ const Button = ({
         <button 
             type="button" 
             onClick={onClick} 
-            className={`${style.button} ${style[variant]} ${active ? style.active : ""}`}
+            className={`${style.button} ${style[variant || 'primary']} ${active ? style.active : ""}`}
         >
             {children}  
         </button>
