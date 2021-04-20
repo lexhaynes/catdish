@@ -91,9 +91,13 @@ const SelectedFiltersDisplay = () => {
                   })
                 }
               </div>
-              <Button variant="link" onClick={() => deleteAllFilters()}> 
-                Clear all filters
-              </Button>
+              <div className="flex w-64 justify-between">
+                <p className="text-semibold"><strong>{filterCount}</strong>{` filter${filterCount > 1 ? 's' :'' } selected`}</p>
+                <Button variant="link" onClick={() => deleteAllFilters()}> 
+                  Clear all filters
+                </Button>
+              </div>
+        
             </>
           : <div className="font-light italic">Add some filters below</div>
         }

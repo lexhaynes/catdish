@@ -38,26 +38,25 @@ export function SelectedFiltersProvider({ children }) {
     },
     //count the number of filters user has selected
     countFilters: () => {
-      let count = 0;
-      for (let key in readOnlyFilters) {
-        count = count + readOnlyFilters[key].length
-      }
+
+      const count = Object.entries(readOnlyFilters)
+                    .reduce( (accumulator, [category, filterList]) => {
+                      return accumulator + filterList.length;
+                    }, 0)
+
       return count;
     },
     getFiltersFromUrl: () => {
-      //make sure query filters match acceptable filters 
-      let filters = {};
-      for (let key in router.query) {
-        if (filterData.filters.includes(key)) { //check if the query param is in our master list of filters
-          const val = router.query[key];
-          if (val.length > 0 ) {
-            filters[key] = typeof val === "string"
-              ? [router.query[key]]
-              : [...new Set(val)] //assume val is an array!!!; add val as a Set to ensure no duplication 
-          }
-
-        }
-      }
+ 
+      const filters = Object.entries(router.query)
+                        .reduce((accumulator, [category, options]) => {
+                          const siftedList = filterData.categories.includes(category) ? [...options] : null; //filter out any roque parameter keys
+                          if (siftedList !== null && siftedList.length > 0) {
+                              const optionsList = typeof options === "string" ? [options] : [...options] // convert options to array if it isn't already
+                              accumulator[category] = [...new Set(optionsList)] //assume val is an array!!!; add val as a Set to ensure no duplication 
+                          }
+                          return accumulator
+                        }, {})
       return filters;
     },   
   };

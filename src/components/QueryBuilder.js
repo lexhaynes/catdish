@@ -83,33 +83,33 @@ const Card = ({category, filter, children}) => {
 
 const OptionList = ({category, options}) => {
 
-//see: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-grouped-by-their-first-char
-//group options into alphabetized sections
-const grouped = options
-    .sort((a, b) => a.localeCompare(b))
-    .reduce((r, e) => {
-      //const key = e[0];
-      let key = e[0].match(/[0-9]/g) ? "0-9" : e[0];
-      if(!r[key]) r[key] = [];
-      r[key].push(e);
-      return r;
+//see: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-groupedByFirstLetter-by-their-first-char
+//group options into alphabetized sections; return an object where the key is "0-9" or letter of alphabet, and value is array of options
+const groupedByFirstLetter = options
+    .sort((firstWord, secondWord) => firstWord.localeCompare(secondWord)) //alphabetize list
+    .reduce((accumulator, currentValue) => {
+      const firstLetter = currentValue[0];
+      const key = firstLetter.match(/[0-9]/g) ? "0-9" : firstLetter; //set key of final object to "0-9" or the letter of alphabet under which word belongs
+      if (!accumulator[key]) accumulator[key] = [];
+      accumulator[key].push(currentValue);
+      return accumulator;
     }, {})
 
     if (options.length > 0) {
         return (
             <>
             {
-                Object.entries(grouped)
-                    .map(([key, value], i) => {
+                Object.entries(groupedByFirstLetter)
+                    .map(([letter, optionList], i) => { //<-- note: the array here is a destructuring of the Object.entries() return val, which is an array; the first val is groupedByFirstLetter's KEY; the second val is groupedByFirstLetter[key], which is an array 
                         return (
                             <div key={`${category}wrapper_${i}`}>
-                                <h3 className="m-3 text-3xl text-indigo-500 font-extrabold">{key}</h3>
+                                <h3 className="m-3 text-3xl text-indigo-500 font-extrabold">{letter}</h3>
                                 <div className="flex flex-wrap ">
                                 {
-                                    value.map((item, j) => (
+                                    optionList.map((filter, j) => (
                                         <div key={`${category}_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
-                                            <Card category={category} filter={item} >
-                                                {item}
+                                            <Card category={category} filter={filter} >
+                                                {filter}
                                             </Card>
                                         </div>
                                     ))

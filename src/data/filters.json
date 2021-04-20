@@ -1,9 +1,11 @@
 { 
-    "filters" : [ 
+    "categories": [
         "brand",
         "texture",
         "include",
-        "exclude",
+        "exclude"
+    ],
+    "filters" : [ 
         "agar_agar",
         "alfalfa",
         "apple",
