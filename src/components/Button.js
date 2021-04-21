@@ -1,14 +1,6 @@
 import PropTypes from 'prop-types'
 import style from '@styles/Button.module.scss'
 
-/* button variants */
-
-/*
-    pill
-    default
-
-*/
-
 const Button = ({
     onClick,
     variant,

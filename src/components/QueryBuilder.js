@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types'
+import querystring from 'querystring'
+import {useRouter} from 'next/router'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { SearchIcon } from '@heroicons/react/solid'
@@ -137,7 +139,8 @@ const groupedByFirstLetter = options
 }
 
 const QueryBuilder = ({tabName, optionList}) => {
-    const resultsTabPageLink = getNavPath("results");
+    const router = useRouter();
+    const resultsTabPageLink = getNavPath("results") + '/?' + querystring.stringify(router.query);
     const [searchInput, setSearchInput] = useState('');    
     const [filteredOptions, setFilteredOptions] = useState([...optionList]);  
   
@@ -167,16 +170,14 @@ const QueryBuilder = ({tabName, optionList}) => {
 
             <h4 className={subheadStyles}>Select your {tabName}s</h4>
 
-           
-            <OptionList category={tabName} options={filteredOptions} clearSearch={clearSearch}  />
+           <OptionList category={tabName} options={filteredOptions} clearSearch={clearSearch}  />
+          
 
-            <div className="mx-auto my-12">
-                <Button>
-                    <Link href={resultsTabPageLink}>Get Results</Link>
-                </Button>
+            <div className="my-12 flex justify-center">
+                <Link href={resultsTabPageLink} passHref>
+                    <a><Button>Get Results</Button></a>
+                </Link>
             </div>   
-              
-            
         </>
     )
 }

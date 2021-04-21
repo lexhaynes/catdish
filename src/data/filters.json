@@ -5,6 +5,186 @@
         "include",
         "exclude"
     ],
+    "groupedFilters": [
+        {
+            "name": "poultry_fowl",
+            "display name": "Poultry / Fowl",
+            "filters": [
+                "chicken",
+                "turkey",
+                "duck",
+                "fowl_other",
+                "poultry_nonspecific"
+            ]
+        },
+        {
+            "name": "meat",
+            "display name": "Meat",
+            "filters": [
+                "beef",
+                "lamb",
+                "pork",
+                "rabbit",
+                "venison",
+                "meat_other",
+                "meat_nonspecific"
+            ]
+        },
+        {
+            "name": "seafood",
+            "display name": "Seafood",
+            "filters": [
+                "seafood"
+            ]
+        },
+        {
+            "name": "eggs_dairy",
+            "display name": "Eggs / Dairy",
+            "filters": [
+                "eggs",
+                "dairy"
+            ]
+        },
+        {
+            "name": "grains_seeds",
+            "display name": "Grains & Seeds",
+            "filters": [
+                "oats",
+                "quinoa",
+                "rice",
+                "wheat",
+                "flaxseed"
+            ]
+        },
+        {
+            "name": "gums_thickeners",
+            "display name": "Gums / Thickeners",
+            "filters": [
+                "agar_agar",
+                "carrageenan",
+                "cassia",
+                "ghatti",
+                "guar_gum",
+                "locust_carob_bean",
+                "xanthan",
+                "tapioca",
+                "starches_nonspecific"
+                ]
+        },
+        {
+            "name": "vegetables",
+            "display name": "Vegetables",
+            "filters": [
+                "artichokes",
+                "asparagus",
+                "beans",
+                "beets",
+                "broccoli",
+                "cabbage",
+                "carrots",
+                "celery",
+                "eggplant",
+                "kale",
+                "kelp",
+                "lentils",
+                "lettuce",
+                "peas",
+                "peppers",
+                "potato",
+                "potato_starch",
+                "pumpkin",
+                "soy",
+                "spinach",
+                "squash",
+                "tomatoes",
+                "turnips",
+                "zucchini",
+                "vegetables"
+            ]
+        },
+        {
+            "name": "fruit",
+            "display name": "Fruit",
+            "filters": [
+                "apples",
+                "bananas",
+                "blueberries",
+                "coconut",
+                "cranberries",
+                "lemons",
+                "papayas",
+                "pineapples",
+                "pomegranates",
+                "raspberries",
+                "barley",
+                "corn"
+            ]
+        },
+        {
+            "name": "plant_based_oils",
+            "display name": "Plant-Based Oils",
+            "filters": [
+                "canola_oil",
+                "coconut_oil",
+                "corn_oil",
+                "flaxseed_oil",
+                "olive_oil",
+                "palm_oil",
+                "rapeseed_oil",
+                "safflower_oil",
+                "soy_bean_oil",
+                "sunflower_seed_oil",
+                "vegetable_oil"
+            ]
+        },
+        {
+            "name": "herbs_spices_roots",
+            "display name": "Herbs / Spices / Roots",
+            "filters": [
+                "alfalfa",
+                "chamomile",
+                "chicory",
+                "cinnamon",
+                "dandelion",
+                "fennel",
+                "fenugreek_seeds",
+                "ginger",
+                "grass",
+                "juniper_berry",
+                "licorice",
+                "oregano",
+                "paprika",
+                "parsley",
+                "peppermint",
+                "rosemary",
+                "sage",
+                "thyme",
+                "turmeric",
+                "valerian_root",
+                "yucca_schidigera"
+            ]
+        },
+        {
+            "name": "flavor_enhancers",
+            "display name": "Flavor Enhancers",
+            "filters": [
+                "flavors_artificial_natural",
+                "salt",
+                "sugars",
+                "yeast"
+            ]
+        },
+        {
+            "name": "other_additives",
+            "display name": "Other Additives",
+            "filters": [
+                "dl_methionine",
+                "menadione_vitamin_k",
+                "montmorillonite_clay"
+            ]
+
+        }
+    ],
     "filters" : [ 
         "agar_agar",
         "alfalfa",
@@ -63,6 +243,7 @@
         "locust_carob_bean",
         "marigold",
         "meat_nonspecific",
+        "meat_other",
         "menadione_vitamin_k",
         "montmorillonite_clay",
         "oats",
