@@ -3,6 +3,8 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import {useRouter} from 'next/router'
 import filterData from '@data/filters.json'
 
+const CATEGORIES = filterData.categories;
+
 /* example here: https://github.com/netlify/explorers/blob/main/src/context/missions.js */
 
 const SelectedFiltersContext = createContext();
@@ -50,7 +52,7 @@ export function SelectedFiltersProvider({ children }) {
  
       const filters = Object.entries(router.query)
                         .reduce((accumulator, [category, options]) => {
-                          const siftedList = filterData.categories.includes(category) ? [...options] : null; //filter out any roque parameter keys
+                          const siftedList = CATEGORIES.includes(category) ? [...options] : null; //filter out any roque parameter keys
                           if (siftedList !== null && siftedList.length > 0) {
                               const optionsList = typeof options === "string" ? [options] : [...options] // convert options to array if it isn't already
                               accumulator[category] = [...new Set(optionsList)] //assume val is an array!!!; add val as a Set to ensure no duplication 

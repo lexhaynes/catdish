@@ -9,6 +9,8 @@ import Button from '@components/Button'
 import { useSelectedFiltersUpdate, useSelectedFiltersState } from '@context/selectedFilters'
 import { getNavPath } from '@utils/data'
 import { capitalize } from '@utils/misc'
+import lang from 'lodash/lang'
+import collection from 'lodash/collection'
 
 const headingStyles = "text-2xl font-bold mb-2";
 const subheadStyles = "text-md font-medium";
@@ -52,7 +54,7 @@ const SearchBar = ({searchInput, handleChange}) => {
 }
 
 //TODO: set card as selected or not based on the URL!!
-const Card = ({category, filter, isSelected, children}) => {
+const OptionItem = ({category, filter, isSelected, children}) => {
     const [selected, setSelected] = useState(false);
     const { addFilter, deleteFilter } = useSelectedFiltersUpdate();
 
@@ -87,38 +89,87 @@ const Card = ({category, filter, isSelected, children}) => {
     )
 }
 
-const OptionList = ({category, options, clearSearch}) => {
-    const { readOnlyFilters } = useSelectedFiltersState();
+const OptionItemExpandable = ({ingredientGroup, category, options}) => {
 
-//see: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-groupedByFirstLetter-by-their-first-char
-//group options into alphabetized sections; return an object where the key is "0-9" or letter of alphabet, and value is array of options
-const groupedByFirstLetter = options
-    .sort((firstWord, secondWord) => firstWord.localeCompare(secondWord)) //alphabetize list
-    .reduce((accumulator, currentValue) => {
-      const firstLetter = currentValue[0];
-      const key = firstLetter.match(/[0-9]/g) ? "0-9" : firstLetter; //set key of final object to "0-9" or the letter of alphabet under which word belongs
-      if (!accumulator[key]) accumulator[key] = [];
-      accumulator[key].push(currentValue);
-      return accumulator;
-    }, {})
+  const [selected, setSelected] = useState(false)
 
-    if (options.length > 0) {
-        return (
+  const updateSelected = () => {
+    setSelected(!selected)
+}
+
+  const toggleExpansion = () => {
+    updateSelected();
+  } 
+
+
+  const baseClasses = "flex justify-between align-center shadow-lg p-3 w-full text-left cursor-pointer focus:outline-none"
+  const defaultClasses = "bg-white hover:bg-gray-700 hover:text-white rounded-lg"
+  const selectedClasses = "bg-gray-700 text-white hover:bg-gray-500 pb-5 rounded-t-lg"
+  
+
+  return (
+    <div className="my-4">
+      <button
+          onClick={() => toggleExpansion()} 
+          className={`${baseClasses} ${selected ? selectedClasses : defaultClasses}`}>
+          <span className="text-lg font-medium">{ingredientGroup}</span>
+      </button>
+      {
+        selected 
+        ? <div className="bg-white shadow-lg rounded-b-lg divide-y divide-gray-300 -mt-2">
+        {
+          options.map((filter, i) => (
+            <div key={`optionListItemExpandable_${i}`} className="flex justify-between p-2">
+              <span className="ml-4">{capitalize(filter).replace(/_/g, " ")}</span>
+              <span className="mr-4">TOGGLE</span>
+            </div>
+          ))
+        }
+      </div>
+        : null
+      }
+   
+      
+      
+    </div>
+  )
+}
+
+const OptionList = ({category, options, dataType}) => {
+    const { readOnlyFilters } = useSelectedFiltersState(); 
+
+      //if our data is a one-dimensional array from the server (e.g. brands or textures data)
+      if (dataType === "LIST") {
+        //group options into alphabetized sections; return an object where the key is "0-9" or letter of alphabet, and value is array of options
+        //forsee: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-groupedByFirstLetter-by-their-first-char
+        const groupedByFirstLetter = options
+          .sort((firstWord, secondWord) => firstWord.localeCompare(secondWord)) //alphabetize list
+          .reduce((accumulator, currentValue) => {
+            const firstLetter = currentValue[0];
+            const key = firstLetter.match(/[0-9]/g) ? "0-9" : firstLetter; //set key of final object to "0-9" or the letter of alphabet under which word belongs
+            if (!accumulator[key]) accumulator[key] = [];
+            accumulator[key].push(currentValue);
+            return accumulator;
+          }, {})
+
+          return (
             <>
             {
                 Object.entries(groupedByFirstLetter)
                     .map(([letter, optionList], i) => ( //<-- note: the array here is a destructuring of the Object.entries() return val, which is an array; the first val is groupedByFirstLetter's KEY; the second val is groupedByFirstLetter[key], which is an array 
-                        <div key={`${category}wrapper_${i}`}>
+                        <div key={`optionList_${i}`}>
                             <h3 className="m-3 text-3xl text-indigo-500 font-extrabold">{letter.toUpperCase()}</h3>
                             <div className="flex flex-wrap ">
                             {
                                 optionList.map((filter, j) => {
                                     const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
-                                    return <div key={`${category}_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
-                                            <Card category={category} filter={filter} isSelected={isSelected} >
+                                    return (
+                                        <div key={`optionListItem_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
+                                            <OptionItem category={category} filter={filter} isSelected={isSelected} >
                                                 {capitalize(filter).replace(/_/g, " ")}
-                                            </Card>
+                                            </OptionItem>
                                         </div>
+                                    )
                                 })
                             }
                             </div>
@@ -126,25 +177,32 @@ const groupedByFirstLetter = options
                     ))
             }
             </>
-        )   
-    }
+          )
+      }
+    
+    //otherwise our data is an array of objects from filters.json (e.g. for includes/excludes)
     return (
         <>
-            <p className="italic">No results match your search.</p>
-            <Button variant="link" onClick={() => clearSearch()}> 
-                Clear search terms
-            </Button>
+          {
+            options.map( ({display_name, filters}, i) => (
+              <div key={`optionGroup_${i}`}>
+                <OptionItemExpandable ingredientGroup={display_name} category={category} options={filters} />
+              </div>
+            ))
+          }
+          
         </>
-    )
+    )   
 }
 
-const QueryBuilder = ({tabName, optionList}) => {
+const QueryBuilder = ({tabName, optionList, dataType}) => {
     const router = useRouter();
     const resultsTabPageLink = getNavPath("results") + '/?' + querystring.stringify(router.query);
+    //searchInput stores the the user-submitted search term in the search field
     const [searchInput, setSearchInput] = useState('');    
+    //filteredOptions stores the options that match the user's searchInput, aka a filtered list of data
     const [filteredOptions, setFilteredOptions] = useState([...optionList]);  
   
-
     const handleSearch = (e) => {
         setSearchInput(() => e.target.value)
     }
@@ -153,26 +211,81 @@ const QueryBuilder = ({tabName, optionList}) => {
         setSearchInput(() => '')
     }
 
-    
-    useEffect(() => {
-        setFilteredOptions(() => optionList.filter(item => {
-            const filterListItem = item.toLowerCase().replace(/[-,.&']/g, ""); //set filter to lower case and remove special chars for easier searching
-            const input = searchInput.toLowerCase().replace(/[-,.&']/g, ""); //set serach term to lower case and remove special chars for easier searching
-            return filterListItem.includes(input)
-        }))
-    }, [searchInput])
+    //transform a string so that it is lower case and has special chars removed
+    //this is so that the string will be more easily searchable
+    const makeStringSearchable = (str) => {
+      return str.toLowerCase().replace(/[-,.&']/g, "")
+    }
 
+    //TODO: FIX THIS
+    //update the options list when user enters a search term in the searcnbar
+    useEffect(() => {
+        const input = makeStringSearchable(searchInput); //transform serach term to lower case and remove special chars for easier searching
+       
+        //if input is empty, reset filteredOptions to value of optionList
+        if (input.length === 0) {
+          setFilteredOptions(optionList); 
+        } else if (/\s/g.test(input) === false) { //make sure input isn't all whitespace
+          
+          //deep clone optionList so it doesn't get mutated
+          const optionListCopy = lang.cloneDeep(optionList);
+
+          //filter through one dimensional optionList to return only items that match search input
+          if (dataType === "LIST") {
+            const filteredOneDimensionalList = optionListCopy.filter(option => {
+                const transformedOption = makeStringSearchable(option);
+                return transformedOption.includes(input)
+            })
+
+            setFilteredOptions(() => filteredOneDimensionalList)
+            
+          } else {  //filter through two dimensional list (list of objects that contain arrays) to return any items that match search input
+
+              //our goal is to create an array of object(s), whose own array of filters ONLY contains vals that match search term
+                const filteredTwoDimensionalList = optionListCopy.reduce((accumulator, ingredientGroup) => {
+                const { filters } = ingredientGroup;
+                
+                //filter through list of options and return only items that match search input
+                const matchedOptions = filters.filter(option => {
+                  const transformedOption = makeStringSearchable(option);
+                  return transformedOption.includes(input)
+                })
+              
+                // re-assign ingredientGroup filters only if we found a match (full or partial) to search input within the filters array!
+                if (matchedOptions.length > 0) {
+                  ingredientGroup.filters = matchedOptions;
+                  accumulator = [...accumulator, ingredientGroup];
+                }
+
+                return accumulator;
+              }, []) //end optionList.reduce
+
+              
+              setFilteredOptions(() => filteredTwoDimensionalList)
+
+          }//end else (option list is 2d)
+    
+        } 
+    }, [searchInput])
 
     return (
         <>
-            <Heading category={tabName} />
-            <SearchBar searchInput={searchInput} handleChange={handleSearch}/>
+          <Heading category={tabName} />
+          <SearchBar searchInput={searchInput} handleChange={handleSearch}/>
 
-            <h4 className={subheadStyles}>Select your {tabName}s</h4>
+          <h4 className={subheadStyles}>Select your {tabName}s</h4>
 
-           <OptionList category={tabName} options={filteredOptions} clearSearch={clearSearch}  />
-          
-
+          {
+            filteredOptions.length > 0 
+                  ?  <OptionList category={tabName} options={filteredOptions} dataType={dataType} clearSearch={clearSearch}  />
+                  :   <>
+                          <p className="italic">No results match your search.</p>
+                          <Button variant="link" onClick={() => clearSearch()}> 
+                              Clear search terms
+                          </Button>
+                      </>
+          }
+    
             <div className="my-12 flex justify-center">
                 <Link href={resultsTabPageLink} passHref>
                     <a><Button>Get Results</Button></a>

@@ -9,6 +9,7 @@ const FILTER_NAME = "texture";
       title="Filter by Texture" 
       filterName={FILTER_NAME}
       data={data}
+      dataType="LIST"
     />
   )
 }

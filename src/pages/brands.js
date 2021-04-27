@@ -9,6 +9,7 @@ const Brands = ({ data }) => {
       title="Filter by brand" 
       filterName={FILTER_NAME}
       data={data}
+      dataType="LIST"
     />
   )
 }

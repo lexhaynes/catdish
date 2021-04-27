@@ -15,6 +15,13 @@ export const pickSchema = (model, excluded) => {
   return fields;
  }
 
+ export const arrayEquals = (a, b) => {
+  return Array.isArray(a) &&
+    Array.isArray(b) &&
+    a.length === b.length &&
+    a.every((val, index) => val === b[index]);
+}
+
  //serialize object into URI string
   export const serialize = ( obj ) => {
     let str = '?' + Object.keys(obj).reduce(function(a, k){

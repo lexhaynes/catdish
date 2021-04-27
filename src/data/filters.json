@@ -8,7 +8,7 @@
     "groupedFilters": [
         {
             "name": "poultry_fowl",
-            "display name": "Poultry / Fowl",
+            "display_name": "Poultry / Fowl",
             "filters": [
                 "chicken",
                 "turkey",
@@ -19,7 +19,7 @@
         },
         {
             "name": "meat",
-            "display name": "Meat",
+            "display_name": "Meat",
             "filters": [
                 "beef",
                 "lamb",
@@ -27,19 +27,20 @@
                 "rabbit",
                 "venison",
                 "meat_other",
-                "meat_nonspecific"
+                "meat_nonspecific",
+                "proteins_other"
             ]
         },
         {
             "name": "seafood",
-            "display name": "Seafood",
+            "display_name": "Seafood",
             "filters": [
                 "seafood"
             ]
         },
         {
             "name": "eggs_dairy",
-            "display name": "Eggs / Dairy",
+            "display_name": "Eggs / Dairy",
             "filters": [
                 "eggs",
                 "dairy"
@@ -47,7 +48,7 @@
         },
         {
             "name": "grains_seeds",
-            "display name": "Grains & Seeds",
+            "display_name": "Grains & Seeds",
             "filters": [
                 "oats",
                 "quinoa",
@@ -58,7 +59,7 @@
         },
         {
             "name": "gums_thickeners",
-            "display name": "Gums / Thickeners",
+            "display_name": "Gums / Thickeners",
             "filters": [
                 "agar_agar",
                 "carrageenan",
@@ -73,7 +74,7 @@
         },
         {
             "name": "vegetables",
-            "display name": "Vegetables",
+            "display_name": "Vegetables",
             "filters": [
                 "artichokes",
                 "asparagus",
@@ -96,18 +97,18 @@
                 "soy",
                 "spinach",
                 "squash",
-                "tomatoes",
-                "turnips",
+                "tomato",
+                "turnip",
                 "zucchini",
                 "vegetables"
             ]
         },
         {
             "name": "fruit",
-            "display name": "Fruit",
+            "display_name": "Fruit",
             "filters": [
-                "apples",
-                "bananas",
+                "apple",
+                "banana",
                 "blueberries",
                 "coconut",
                 "cranberries",
@@ -122,9 +123,10 @@
         },
         {
             "name": "plant_based_oils",
-            "display name": "Plant-Based Oils",
+            "display_name": "Plant-Based Oils",
             "filters": [
                 "canola_oil",
+                "chia_seed_oil",
                 "coconut_oil",
                 "corn_oil",
                 "flaxseed_oil",
@@ -139,10 +141,10 @@
         },
         {
             "name": "herbs_spices_roots",
-            "display name": "Herbs / Spices / Roots",
+            "display_name": "Herbs / Spices / Roots",
             "filters": [
                 "alfalfa",
-                "chamomile",
+                "chammomile",
                 "chicory",
                 "cinnamon",
                 "dandelion",
@@ -152,7 +154,7 @@
                 "grass",
                 "juniper_berry",
                 "licorice",
-                "oregano",
+                "marigold",
                 "paprika",
                 "parsley",
                 "peppermint",
@@ -166,7 +168,7 @@
         },
         {
             "name": "flavor_enhancers",
-            "display name": "Flavor Enhancers",
+            "display_name": "Flavor Enhancers",
             "filters": [
                 "flavors_artificial_natural",
                 "salt",
@@ -176,7 +178,7 @@
         },
         {
             "name": "other_additives",
-            "display name": "Other Additives",
+            "display_name": "Other Additives",
             "filters": [
                 "dl_methionine",
                 "menadione_vitamin_k",
@@ -184,119 +186,5 @@
             ]
 
         }
-    ],
-    "filters" : [ 
-        "agar_agar",
-        "alfalfa",
-        "apple",
-        "artichokes",
-        "asparagus",
-        "banana",
-        "barley",
-        "beans",
-        "beef",
-        "beets",
-        "blueberries",
-        "brand",
-        "broccoli",
-        "cabbage",
-        "canola_oil",
-        "carrageenan",
-        "carrots",
-        "cassia",
-        "celery",
-        "chammomile",
-        "chia_seed_oil",
-        "chicken",
-        "chicory",
-        "cinnamon",
-        "coconut",
-        "coconut_oil",
-        "corn",
-        "corn_oil",
-        "cranberries",
-        "dairy",
-        "dandelion",
-        "dl_methionine",
-        "duck",
-        "eggplant",
-        "eggs",
-        "fennel",
-        "fenugreek_seeds",
-        "flavor",
-        "flavors_artificial_natural",
-        "flaxseed",
-        "flaxseed_oil",
-        "fowl_other",
-        "ghatti",
-        "ginger",
-        "grass",
-        "guar_gum",
-        "juniper_berry",
-        "kale",
-        "kelp",
-        "lamb",
-        "lemons",
-        "lentils",
-        "lettuce",
-        "licorice",
-        "locust_carob_bean",
-        "marigold",
-        "meat_nonspecific",
-        "meat_other",
-        "menadione_vitamin_k",
-        "montmorillonite_clay",
-        "oats",
-        "olive_oil",
-        "oregano",
-        "palm_oil",
-        "papayas",
-        "paprika",
-        "parsley",
-        "peas",
-        "peppermint",
-        "peppers",
-        "pineapples",
-        "pomegranates",
-        "pork",
-        "potato",
-        "potato_starch",
-        "poultry_nonspecific",
-        "product_line",
-        "proteins_other",
-        "pumpkin",
-        "quinoa",
-        "rabbit",
-        "rapeseed_oil",
-        "raspberries",
-        "rice",
-        "rosemary",
-        "safflower_oil",
-        "sage",
-        "salt",
-        "seafood",
-        "soy",
-        "soy_bean_oil",
-        "spinach",
-        "squash",
-        "starches_nonspecific",
-        "sugars",
-        "sunflower_seed_oil",
-        "tapioca",
-        "texture",
-        "thyme",
-        "tomato",
-        "turkey",
-        "turmeric",
-        "turnip",
-        "valerian_root",
-        "vegetable_oil",
-        "vegetables",
-        "venison",
-        "wheat",
-        "xanthan",
-        "yeast",
-        "yucca_schidigera",
-        "zucchini"
     ]
 }
