@@ -61,6 +61,15 @@ export function SelectedFiltersProvider({ children }) {
                         }, {})
       return filters;
     },   
+    //determines if an ingredient belongs to a particular group
+    belongsToIngredientGroup: (ingredient, group) => {
+      const ingredientGroup = filterData.groupedFilters.filter(item => {
+        return item.name === group
+      });
+      const ingredientList = ingredientGroup ? ingredientGroup[0].filters : null;
+      const ingredientPresent = ingredientList ? ingredientList.includes(ingredient) : false;
+      return ingredientPresent
+    }
   };
 
   const updateFns = {

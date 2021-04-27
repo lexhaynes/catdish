@@ -2,15 +2,14 @@ import PropTypes from 'prop-types'
 import querystring from 'querystring'
 import {useRouter} from 'next/router'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { SearchIcon } from '@heroicons/react/solid'
-import { CheckCircleIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
 import Button from '@components/Button'
 import { useSelectedFiltersUpdate, useSelectedFiltersState } from '@context/selectedFilters'
 import { getNavPath } from '@utils/data'
 import { capitalize } from '@utils/misc'
 import lang from 'lodash/lang'
-import collection from 'lodash/collection'
 
 const headingStyles = "text-2xl font-bold mb-2";
 const subheadStyles = "text-md font-medium";
@@ -89,60 +88,95 @@ const OptionItem = ({category, filter, isSelected, children}) => {
     )
 }
 
-const OptionItemExpandable = ({ingredientGroup, category, options}) => {
+const OptionItemExpandable = ({ingredientGroupId, ingredientGroup, category, options}) => {
+  const { readOnlyFilters } = useSelectedFiltersState(); //determine which, if any, filters are already selected
+  const { addFilter, deleteFilter } = useSelectedFiltersUpdate();
 
-  const [selected, setSelected] = useState(false)
+  const [categorySelected, setCategorySelected] = useState(false)
 
-  const updateSelected = () => {
-    setSelected(!selected)
-}
 
+
+  const toggleCategorySelected = () => {
+    setCategorySelected(!categorySelected)
+  }
+  
   const toggleExpansion = () => {
-    updateSelected();
+    toggleCategorySelected();
   } 
 
+  const isOptionItemSelected = (filter) => {
+    
+    let isSelected = false;
+    for (let key in readOnlyFilters) {
+      const transformedFilters = readOnlyFilters[key].map(filter => filter.toLowerCase())
+      if (transformedFilters.includes(filter.toLowerCase())) {
+        console.log(filter + " is included in the URL");
+        isSelected = true;
+        break;
+      }
+    }
+    return isSelected;
+  }
 
-  const baseClasses = "flex justify-between align-center shadow-lg p-3 w-full text-left cursor-pointer focus:outline-none"
-  const defaultClasses = "bg-white hover:bg-gray-700 hover:text-white rounded-lg"
-  const selectedClasses = "bg-gray-700 text-white hover:bg-gray-500 pb-5 rounded-t-lg"
+  //when sub item is clicked, either add or remove filter
+  const handleItemClick = (isSelected, filter) => {
+    if (isSelected) {
+      deleteFilter(category, filter);
+    } else addFilter(category, filter);
+  }
+
+  //classes for the group header
+  const baseGroupClasses = "flex justify-between align-center shadow-lg p-3 w-full text-left cursor-pointer focus:outline-none"
+  const defaultGroupClasses = "bg-white hover:bg-gray-700 hover:text-white rounded-lg"
+  const selectedGroupClasses = "bg-gray-700 text-white hover:bg-gray-500 pb-5 rounded-t-lg"
+ 
+  //classes for the group sub-item
+  const defaultItemClasses = "cursor-pointer bg-white hover:bg-gray-600 hover:text-white"
   
 
   return (
     <div className="my-4">
       <button
           onClick={() => toggleExpansion()} 
-          className={`${baseClasses} ${selected ? selectedClasses : defaultClasses}`}>
+          className={`${baseGroupClasses} ${categorySelected ? selectedGroupClasses : defaultGroupClasses}`}>
           <span className="text-lg font-medium">{ingredientGroup}</span>
       </button>
       {
-        selected 
+        categorySelected 
         ? <div className="bg-white shadow-lg rounded-b-lg divide-y divide-gray-300 -mt-2">
         {
-          options.map((filter, i) => (
-            <div key={`optionListItemExpandable_${i}`} className="flex justify-between p-2">
-              <span className="ml-4">{capitalize(filter).replace(/_/g, " ")}</span>
-              <span className="mr-4">TOGGLE</span>
+          options.map((filter, i) => {
+            const filterIsSelected = isOptionItemSelected(filter);
+    
+            return <div key={`optionListItemExpandable_${i}`} 
+                        className={`${defaultItemClasses} flex justify-between p-2`} 
+                        onClick={() => handleItemClick(filterIsSelected, filter)} 
+                        >
+                          <span className="ml-4">{capitalize(filter).replace(/_/g, " ")}</span>
+                          { filterIsSelected
+                            && <CheckCircleIcon className="mr-4 w-6" />
+                              
+                          }
             </div>
-          ))
+          })
         }
       </div>
         : null
       }
    
-      
-      
     </div>
   )
 }
 
 const OptionList = ({category, options, dataType}) => {
     const { readOnlyFilters } = useSelectedFiltersState(); 
+    const optionsCopy = lang.clone(options)
 
       //if our data is a one-dimensional array from the server (e.g. brands or textures data)
       if (dataType === "LIST") {
         //group options into alphabetized sections; return an object where the key is "0-9" or letter of alphabet, and value is array of options
-        //forsee: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-groupedByFirstLetter-by-their-first-char
-        const groupedByFirstLetter = options
+        //see: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-groupedByFirstLetter-by-their-first-char
+        const groupedByFirstLetter = optionsCopy
           .sort((firstWord, secondWord) => firstWord.localeCompare(secondWord)) //alphabetize list
           .reduce((accumulator, currentValue) => {
             const firstLetter = currentValue[0];
@@ -184,9 +218,14 @@ const OptionList = ({category, options, dataType}) => {
     return (
         <>
           {
-            options.map( ({display_name, filters}, i) => (
+            options.map( ({name, display_name, filters}, i) => (
               <div key={`optionGroup_${i}`}>
-                <OptionItemExpandable ingredientGroup={display_name} category={category} options={filters} />
+                <OptionItemExpandable 
+                  ingredientGroupId={name} 
+                  ingredientGroup={display_name} 
+                  category={category} 
+                  options={filters}
+                  />
               </div>
             ))
           }
@@ -217,8 +256,7 @@ const QueryBuilder = ({tabName, optionList, dataType}) => {
       return str.toLowerCase().replace(/[-,.&']/g, "")
     }
 
-    //TODO: FIX THIS
-    //update the options list when user enters a search term in the searcnbar
+    //update the filteredOptions list when user enters a search term in the searcnbar
     useEffect(() => {
         const input = makeStringSearchable(searchInput); //transform serach term to lower case and remove special chars for easier searching
        
@@ -273,7 +311,7 @@ const QueryBuilder = ({tabName, optionList, dataType}) => {
           <Heading category={tabName} />
           <SearchBar searchInput={searchInput} handleChange={handleSearch}/>
 
-          <h4 className={subheadStyles}>Select your {tabName}s</h4>
+          <h4 className={subheadStyles}>Click to expand a category and {tabName} an ingredient.</h4>
 
           {
             filteredOptions.length > 0 
