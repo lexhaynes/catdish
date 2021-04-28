@@ -13,17 +13,17 @@
     @apply rounded-sm px-5 py-3 bg-gray-700 text-white hover:bg-gray-400;
 }
 .pill {
-    @apply rounded-2xl text-green-500 border-2 border-green-500 hover:bg-gray-200 hover:text-gray-700 hover:border-gray-700 transition;
+    @apply rounded-2xl bg-white border border-gray-700  text-gray-700 hover:bg-gray-200 hover:text-gray-700 transition;
 }
 
 .link {
-    @apply underline font-medium p-0 hover:text-yellow-500;
+    @apply underline font-medium p-0 hover:text-gray-50;
 }
 
 .tab {
-   @apply border-b-4 pb-2 border-white hover:border-yellow-500 focus:border-yellow-500;
+   @apply pb-2 hover:bg-gray-50;
 }
 
 .active {
-    @apply border-yellow-500;
+    @apply bg-gray-50;
 }

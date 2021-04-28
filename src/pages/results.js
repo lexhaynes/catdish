@@ -29,21 +29,20 @@ const ResultsData = ({query}) => {
     )
 
     const gridDisplayClasses = 'grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-6 justify-between';
-    const listDisplayClasses = 'border-b';
+    const listDisplayClasses = 'divide-y';
 
     return (
       <>
-      
         <div className="container">
           <div className="mb-6 flex justify-between">
             <ResultsDisplayControl currentDisplay={resultsDisplay} setDisplay={setResultsDisplay} />
             <ResultsCountHeader count={data.length} />
           </div>
 
-          <div className={resultsDisplay === "grid" ? gridDisplayClasses : listDisplayClasses}>
+          <div className={`mt-10 ${resultsDisplay === "grid" ? gridDisplayClasses : listDisplayClasses}`}>
             {
               data.map( ({brand, product_line, flavor, texture}, i) => (
-                <div key={`result_${i}`} className="border border-gray-100 mb-6 p-4 rounded-md flex flex-col sm:flex-row">
+                <div key={`result_${i}`} className={`${resultsDisplay === "grid" ? 'border border-gray-100 mb-6 p-4 rounded-md ': 'pt-6 mb-2'} flex flex-col sm:flex-row`}>
 
                 {/* LEFT SIDE OF CARD image will go here */}
                   {/* <div className="w-full h-32 mb-3 sm:mx-0 sm:w-52 sm:h-30 bg-gray-100 rounded-sm flex-grow-0"></div> */}

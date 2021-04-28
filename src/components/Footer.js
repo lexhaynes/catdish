@@ -1,8 +1,8 @@
 const Footer = () => {
     return (
-        <footer className="w-full bg-gray-300 p-4 text-gray-600 h-32 flex justify-center items-center">
+        <footer className="w-full bg-gray-100 p-4 h-32 flex justify-center items-center mt-36">
             <div className="container">
-                Footer hi!
+                &copy; CatDish 2021
             </div>
         </footer>
     )

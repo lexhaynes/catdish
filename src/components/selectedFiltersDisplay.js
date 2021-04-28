@@ -48,7 +48,7 @@ const SelectedFiltersDisplay = () => {
     const { deleteFilter, deleteAllFilters } = useSelectedFiltersUpdate();
     
     if (filterCount < 1) {
-      return <div className="font-light italic">Add some filters below</div>
+      return <div className="font-light text-white">Add some filters</div>
     }
 
     return (
