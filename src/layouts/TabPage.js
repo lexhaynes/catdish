@@ -30,9 +30,9 @@ const TabPage = ({ title, children }) => {
             </section>
             
             {/* Tab View Section */ }           
-             <section className="my-10 mx-auto">
+             <section className="my-10 mx-auto h-full">
                 
-                <div className="mb-4">
+                <div className="mb-4 sticky top-0 bg-white">
                     <TabList 
                         activeTab={activeTab} 
                         tabs={tabs} />

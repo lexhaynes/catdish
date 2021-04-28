@@ -12,17 +12,18 @@ const AppShell = ({ title, children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="w-full">
         <header>
           <Navbar />
         </header>
 
-        <main className="sm:container max-w-screen-xl mx-auto my-6">
+      <main className="w-full">
+    
+        <div className="sm:container max-w-screen-xl mx-auto my-6 min-h-screen-3/4">
           {children}
-        </main>
+        </div>
 
         <Footer />
-      </div>
+      </main>
 
     </>
   )
