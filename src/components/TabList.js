@@ -5,9 +5,10 @@ import Button from '@components/Button'
 import { useRouter } from 'next/router'
 
 const TabList = ({activeTab, tabs}) => {
+
     const router = useRouter();
      return (
-            <div className="flex border-b border-gray-300">  
+            <div className={`flex flex-row flex-wrap justify-between`}>  
             {
                 tabs.map((tab, i) => (
                     <span key={`tablist_${i}`} className="mr-2">

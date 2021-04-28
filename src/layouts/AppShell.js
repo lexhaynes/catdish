@@ -2,30 +2,27 @@ import PropTypes from 'prop-types'
 import Head from 'next/head'
 import Navbar from '@components/Navbar'
 import Footer from '@components/Footer'
+import styles from '@styles/AppShell.module.css'
 
 const AppShell = ({ title, children }) => {
 
   return (
-    <>
+    <div className={`${styles.background} ${styles['sans-serif-text']} text-gray-700`}>
       <Head>
         <title>CatDish: {title}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-        <header>
-          <Navbar />
-        </header>
-
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</Head>
       <main className="w-full">
     
-        <div className="sm:container max-w-screen-xl mx-auto my-6 min-h-screen-3/4">
+        <div className="mx-auto min-h-screen-3/4">
           {children}
         </div>
 
         <Footer />
       </main>
 
-    </>
+    </div>
   )
 }
 

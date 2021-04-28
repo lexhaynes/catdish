@@ -1,0 +1,17 @@
+/* The animation code */
+
+.border {
+    border-bottom: 1px solid #cccccc;
+}
+  .default {
+    transform: translateY(-100%) scale(0.75);
+    width: 0;
+  }
+  
+  .animation {
+    width: auto;
+    transform: translateY(0) scale(0.75);
+    transition:transform 250ms;
+    transition-delay:100ms;
+  }
+ 

@@ -9,6 +9,7 @@
       "@models/*": ["src/models/*"],
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@public/*": ["public/*"]
     }
   }

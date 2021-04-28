@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import querystring from 'querystring'
 import {useRouter} from 'next/router'
 import Link from 'next/link'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { SearchIcon } from '@heroicons/react/solid'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
 import Button from '@components/Button'
@@ -39,7 +39,7 @@ const Heading = ({category}) => {
 const SearchBar = ({searchInput, handleChange}) => {
     return (
      <div className="relative my-6 text-gray-600 h-10 w-1/2">
-        <input className="border border-gray-400 bg-white w-full h-full px-4 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:border-2"
+        <input className="border border-gray-400 bg-white w-full h-full px-4 rounded-lg text-sm focus:outline-none focus:border-yellow-500 focus:border-2"
           name="search" 
           placeholder={`Search the filters`} 
           value={searchInput} 
@@ -52,7 +52,6 @@ const SearchBar = ({searchInput, handleChange}) => {
     )
 }
 
-//TODO: set card as selected or not based on the URL!!
 const OptionItem = ({category, filter, isSelected, children}) => {
     const [selected, setSelected] = useState(false);
     const { addFilter, deleteFilter } = useSelectedFiltersUpdate();
@@ -73,7 +72,7 @@ const OptionItem = ({category, filter, isSelected, children}) => {
         updateSelected();
     } 
 
-    const baseClasses = "flex justify-between align-center shadow-lg rounded-lg p-3 my-4 w-full text-left cursor-pointer focus:outline-none"
+    const baseClasses = "flex justify-center align-center border p-3 cursor-pointer focus:outline-none"
     const defaultClasses = "bg-white hover:bg-gray-700 hover:text-white"
     const selectedClasses = "bg-gray-700 text-white hover:bg-gray-500"
     
@@ -82,13 +81,13 @@ const OptionItem = ({category, filter, isSelected, children}) => {
         <button
             onClick={() => handleClick()} 
             className={`${baseClasses} ${selected ? selectedClasses : defaultClasses}`}>
-                {children}
+                <p>{children}</p>
                 {selected ? <CheckCircleIcon className="w-6"/>: ''}
         </button>
     )
 }
 
-const OptionItemExpandable = ({ingredientGroupId, ingredientGroup, category, options}) => {
+const OptionItemExpandable = ({ingredientGroup, category, options}) => {
   const { readOnlyFilters } = useSelectedFiltersState(); //determine which, if any, filters are already selected
   const { addFilter, deleteFilter } = useSelectedFiltersUpdate();
 
@@ -110,7 +109,6 @@ const OptionItemExpandable = ({ingredientGroupId, ingredientGroup, category, opt
     for (let key in readOnlyFilters) {
       const transformedFilters = readOnlyFilters[key].map(filter => filter.toLowerCase())
       if (transformedFilters.includes(filter.toLowerCase())) {
-        console.log(filter + " is included in the URL");
         isSelected = true;
         break;
       }
@@ -173,9 +171,10 @@ const OptionList = ({category, options, dataType}) => {
     const optionsCopy = lang.clone(options)
 
       //if our data is a one-dimensional array from the server (e.g. brands or textures data)
-      if (dataType === "LIST") {
-        //group options into alphabetized sections; return an object where the key is "0-9" or letter of alphabet, and value is array of options
+      if (dataType === "LIST" && category === "brand") {
+        //if category is BRANDS group options into alphabetized sections; return an object where the key is "0-9" or letter of alphabet, and value is array of options
         //see: https://stackoverflow.com/questions/50749152/render-a-list-of-names-alphabetically-and-groupedByFirstLetter-by-their-first-char
+        
         const groupedByFirstLetter = optionsCopy
           .sort((firstWord, secondWord) => firstWord.localeCompare(secondWord)) //alphabetize list
           .reduce((accumulator, currentValue) => {
@@ -191,9 +190,9 @@ const OptionList = ({category, options, dataType}) => {
             {
                 Object.entries(groupedByFirstLetter)
                     .map(([letter, optionList], i) => ( //<-- note: the array here is a destructuring of the Object.entries() return val, which is an array; the first val is groupedByFirstLetter's KEY; the second val is groupedByFirstLetter[key], which is an array 
-                        <div key={`optionList_${i}`}>
-                            <h3 className="m-3 text-3xl text-indigo-500 font-extrabold">{letter.toUpperCase()}</h3>
-                            <div className="flex flex-wrap ">
+                        <div key={`optionList_${i}`} className="p-4 rounded-2xl my-6 bg-white">
+                            <h3 className="m-3 text-3xl text-yellow-500 font-extrabold">{letter.toUpperCase()}</h3>
+                            <div className="space-y-2">
                             {
                                 optionList.map((filter, j) => {
                                     const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
@@ -212,16 +211,35 @@ const OptionList = ({category, options, dataType}) => {
             }
             </>
           )
+      } else if (dataType === "LIST" && category === "texture") { // for the textures, just display items ungroups
+
+        return (
+          <div className="w-full p-4 rounded-xl my-6">
+          <div className="flex flex-wrap ">
+          {
+            optionsCopy.map((filter, j) => {
+                  const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
+                  return (
+                      <div key={`optionListItem_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
+                          <OptionItem category={category} filter={filter} isSelected={isSelected} >
+                              {capitalize(filter).replace(/_/g, " ")}
+                          </OptionItem>
+                      </div>
+                  )
+              })
+          }
+          </div>
+      </div>
+        )
       }
     
     //otherwise our data is an array of objects from filters.json (e.g. for includes/excludes)
     return (
         <>
           {
-            options.map( ({name, display_name, filters}, i) => (
+            options.map( ({display_name, filters}, i) => (
               <div key={`optionGroup_${i}`}>
                 <OptionItemExpandable 
-                  ingredientGroupId={name} 
                   ingredientGroup={display_name} 
                   category={category} 
                   options={filters}
@@ -308,10 +326,15 @@ const QueryBuilder = ({tabName, optionList, dataType}) => {
 
     return (
         <>
-          <Heading category={tabName} />
-          <SearchBar searchInput={searchInput} handleChange={handleSearch}/>
+          <div className="p-4">
 
-          <h4 className={subheadStyles}>Click to expand a category and {tabName} an ingredient.</h4>
+            <Heading category={tabName} />
+            <SearchBar searchInput={searchInput} handleChange={handleSearch}/>
+
+            <h4 className={subheadStyles}>Select your filters below</h4>
+
+          </div>
+
 
           {
             filteredOptions.length > 0 
