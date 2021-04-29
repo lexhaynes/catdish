@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-import Navbar from '@components/Navbar'
 import Footer from '@components/Footer'
-import styles from '@styles/AppShell.module.css'
+import styles from '@styles/AppShell.module.scss'
 
 const AppShell = ({ title, children }) => {
 

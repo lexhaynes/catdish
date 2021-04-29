@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import querystring from 'querystring'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
@@ -8,13 +9,16 @@ const TabList = ({activeTab, tabs}) => {
 
     const router = useRouter();
      return (
-            <div className={`flex flex-row flex-wrap justify-between`}>  
+            <div className={`flex flex-row justify-center`}>  
             {
                 tabs.map((tab, i) => (
                     <span key={`tablist_${i}`} className="mr-2">
                         <Link href={tab.path + '/?' + querystring.stringify(router.query)} scroll={false} passHref>
                             <a>
-                            <Button variant="tab" active={tab.name === activeTab}>
+                            <Button 
+                                variant="tab" 
+                                active={tab.name === activeTab}
+                                >
                                 {tab.displayName}
                             </Button>
                             </a>

@@ -13,7 +13,7 @@
     @apply rounded-sm px-5 py-3 bg-gray-700 text-white hover:bg-gray-400;
 }
 .pill {
-    @apply rounded-2xl bg-white border border-gray-700  text-gray-700 hover:bg-gray-200 hover:text-gray-700 transition;
+    @apply rounded-2xl border-2 border-gray-700 text-white bg-gray-700 transition hover:border-black  hover:text-black;
 }
 
 .link {
@@ -21,9 +21,39 @@
 }
 
 .tab {
-   @apply pb-2 hover:bg-gray-50;
+   @apply pb-3 font-bold hover:text-red-400 transition;
+    &:hover:after,
+    &:active:after, 
+    &:focus:after {
+        @apply bottomBorderAnimation;
+    }
+}
+.active {
+    @apply text-red-400;
+    &:after {
+        @apply bottomBorder;
+    }
 }
 
-.active {
-    @apply bg-gray-50;
+.bottomBorder {
+    content: '';
+    position:absolute;
+    width:36px;
+    bottom:6px;
+    height:3px;
+    border-radius:20px;
+    @apply bg-red-400;
 }
+.bottomBorderAnimation {
+    @apply bottomBorder;
+    transform:scaleX(0);
+    transform-origin: left;
+    animation-name: animateBorder;
+    animation-duration: 250ms;
+    animation-delay: 25ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes animateBorder {
+    to {transform:scaleX(1)}
+} 

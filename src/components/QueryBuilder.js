@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import {classnames} from 'tailwindcss-classnames'
 import querystring from 'querystring'
 import {useRouter} from 'next/router'
 import Link from 'next/link'
@@ -124,19 +125,25 @@ const OptionItemExpandable = ({ingredientGroup, category, options}) => {
   }
 
   //classes for the group header
-  const baseGroupClasses = "flex justify-between align-center shadow-lg p-3 w-full text-left cursor-pointer focus:outline-none"
-  const defaultGroupClasses = "bg-white hover:bg-gray-700 hover:text-white rounded-lg"
-  const selectedGroupClasses = "bg-gray-700 text-white hover:bg-gray-500 pb-5 rounded-t-lg"
+  const baseGroupClasses = classnames('flex', 'justify-between', 'align-center', 'shadow-lg', 'p-3', 'w-full', 'text-left', 'cursor-pointer', 'focus:outline-none');
+  const defaultGroupClasses = classnames('bg-white', 'hover:bg-gray-700', 'hover:text-white', 'rounded-lg');
+  const selectedGroupClasses = classnames('bg-gray-700', 'text-white', 'hover:bg-gray-500', 'pb-5', 'rounded-t-lg');
  
   //classes for the group sub-item
-  const defaultItemClasses = "cursor-pointer bg-white hover:bg-gray-600 hover:text-white"
+  const defaultItemClasses = classnames('cursor-pointer', 'bg-white', 'hover:bg-gray-600', 'hover:text-white');
   
+  const buttonStyle = (selected) => (
+    classnames(baseGroupClasses, {
+      [selectedGroupClasses]: selected,
+      [defaultGroupClasses]: selected,
+    })
+    );
 
   return (
     <div className="my-4">
       <button
           onClick={() => toggleExpansion()} 
-          className={`${baseGroupClasses} ${categorySelected ? selectedGroupClasses : defaultGroupClasses}`}>
+          className={buttonStyle(categorySelected)}>
           <span className="text-lg font-medium">{ingredientGroup}</span>
       </button>
       {

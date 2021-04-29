@@ -6,7 +6,8 @@ const Button = ({
     variant,
     active,
     icon,
-    children
+    children,
+    ...props
 }) => {
     if (icon) {
         return (
@@ -25,6 +26,7 @@ const Button = ({
             type="button" 
             onClick={onClick} 
             className={`${style.button} ${style[variant || 'primary']} ${active ? style.active : ""}`}
+            {...props}
         >
             {children}  
         </button>
