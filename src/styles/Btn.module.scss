@@ -1,0 +1,59 @@
+@import '_variables';
+
+.button {
+    @apply px-4 py-1 flex justify-between focus:outline-none transition;
+}
+
+.icon {
+    @apply ml-4;
+}
+
+/* button variants */
+.primary {
+    @apply rounded-md px-5 py-3 bg-gray-700 text-white font-semibold hover:bg-red-300 hover:text-gray-700;
+}
+.pill {
+    @apply rounded-2xl text-white bg-gray-700 transition hover:bg-gray-500;
+}
+
+.link {
+    @apply underline font-medium p-0 hover:text-gray-50;
+}
+
+.tab {
+   @apply pb-3 font-bold hover:text-red-400 transition;
+    &:hover:after,
+    &:active:after, 
+    &:focus:after {
+        @apply bottomBorderAnimation;
+    }
+}
+.active {
+    @apply text-red-400;
+    &:after {
+        @apply bottomBorder;
+    }
+}
+
+.bottomBorder {
+    content: '';
+    position:absolute;
+    width:36px;
+    bottom:6px;
+    height:3px;
+    border-radius:20px;
+    @apply bg-red-400;
+}
+.bottomBorderAnimation {
+    @apply bottomBorder;
+    transform:scaleX(0);
+    transform-origin: left;
+    animation-name: animateBorder;
+    animation-duration: 250ms;
+    animation-delay: 25ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes animateBorder {
+    to {transform:scaleX(1)}
+} 

@@ -1,8 +1,9 @@
+import classnames from 'tailwindcss-classnames'
 
-const Logo = ({color = 'red-300'}) => {
-    return <p className={`text-2xl text-${color}`}>
-        <span className={`font-extrabold`}>cat</span><span className='font-medium'>dish</span>
-    </p>
+const Logo = ({color = "pink"}) => {
+    const style = classnames('w-24', 'h-8');
+    if (color == "black") return <img className={style} src="logo-black.png" />
+    return <img className={style} src="logo-pink.png" />
   }
   
 

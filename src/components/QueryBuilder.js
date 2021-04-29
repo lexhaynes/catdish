@@ -5,7 +5,7 @@ import {useRouter} from 'next/router'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { SearchIcon } from '@heroicons/react/solid'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import Btn from '@components/Btn'
 import { useSelectedFiltersUpdate, useSelectedFiltersState } from '@context/selectedFilters'
 import { getNavPath } from '@utils/data'
@@ -40,7 +40,7 @@ const Heading = ({category}) => {
 const SearchBar = ({searchInput, handleChange}) => {
     return (
      <div className="relative my-6 text-gray-600 h-10 w-1/2">
-        <input className="border border-gray-400 bg-white w-full h-full px-4 rounded-lg text-sm focus:outline-none focus:border-yellow-500 focus:border-2"
+        <input className="border border-gray-400 bg-white w-full h-full px-4 rounded-lg text-sm focus:outline-none focus:border-red-400 focus:border-2"
           name="search" 
           placeholder={`Search the filters`} 
           value={searchInput} 
@@ -52,6 +52,9 @@ const SearchBar = ({searchInput, handleChange}) => {
       </div> 
     )
 }
+
+  //classes for option item
+  const defaultItemClasses = classnames('cursor-pointer', 'hover:bg-gray-700', 'hover:text-white', 'bg-white');
 
 const OptionItem = ({category, filter, isSelected, children}) => {
     const [selected, setSelected] = useState(false);
@@ -73,45 +76,42 @@ const OptionItem = ({category, filter, isSelected, children}) => {
         updateSelected();
     } 
 
-    const baseClasses = "flex justify-center align-center border p-3 cursor-pointer focus:outline-none"
-    const defaultClasses = "bg-white hover:bg-gray-700 hover:text-white"
-    const selectedClasses = "bg-gray-700 text-white hover:bg-gray-500"
-    
 
     return (
-        <button
-            onClick={() => handleClick()} 
-            className={`${baseClasses} ${selected ? selectedClasses : defaultClasses}`}>
-                <p>{children}</p>
-                {selected ? <CheckCircleIcon className="w-6"/>: ''}
-        </button>
+
+        <div
+          className={`${defaultItemClasses} flex justify-between p-2`} 
+          onClick={() => handleClick()} 
+          >
+            <span className="ml-4">{children}</span>
+            { selected
+              && <CheckCircleIcon className="mr-4 w-6" />
+                
+            }
+          </div>
+  
+        
     )
 }
 
+//@category refers to the tab category, eg: brand/texture/include/excludes
 const OptionItemExpandable = ({ingredientGroup, category, options}) => {
   const { readOnlyFilters } = useSelectedFiltersState(); //determine which, if any, filters are already selected
   const { addFilter, deleteFilter } = useSelectedFiltersUpdate();
 
-  const [categorySelected, setCategorySelected] = useState(false)
+  const [groupSelected, setGroupSelected] = useState([])//store an array of selected categories
 
-
-
-  const toggleCategorySelected = () => {
-    setCategorySelected(!categorySelected)
-  }
-  
   const toggleExpansion = () => {
-    toggleCategorySelected();
-  } 
+    setGroupSelected(!groupSelected)
+  }
+ 
 
-  const isOptionItemSelected = (filter) => {
-    
+  const isOptionItemSelected = (filter, category) => {
     let isSelected = false;
-    for (let key in readOnlyFilters) {
-      const transformedFilters = readOnlyFilters[key].map(filter => filter.toLowerCase())
+    if (readOnlyFilters[category]) {
+      const transformedFilters = readOnlyFilters[category].map(option => option.toLowerCase())
       if (transformedFilters.includes(filter.toLowerCase())) {
         isSelected = true;
-        break;
       }
     }
     return isSelected;
@@ -125,17 +125,15 @@ const OptionItemExpandable = ({ingredientGroup, category, options}) => {
   }
 
   //classes for the group header
-  const baseGroupClasses = classnames('flex', 'justify-between', 'align-center', 'shadow-lg', 'p-3', 'w-full', 'text-left', 'cursor-pointer', 'focus:outline-none');
-  const defaultGroupClasses = classnames('bg-white', 'hover:bg-gray-700', 'hover:text-white', 'rounded-lg');
-  const selectedGroupClasses = classnames('bg-gray-700', 'text-white', 'hover:bg-gray-500', 'pb-5', 'rounded-t-lg');
+  const baseGroupClasses = classnames(sectionBgStyle, 'rounded-xl', 'flex', 'items-center',  'cursor-pointer', 'hover:bg-red-400', 'hover:text-white', 'focus:outline-none');
+  const unselectedGroupClasses = classnames('bg-white', 'hover:bg-red-400', 'hover:text-white', 'rounded-lg');
+  const selectedGroupClasses = classnames('bg-red-400', 'text-white', 'pb-5', 'rounded-t-lg', 'rounded-b-none');
  
-  //classes for the group sub-item
-  const defaultItemClasses = classnames('cursor-pointer', 'bg-white', 'hover:bg-gray-600', 'hover:text-white');
   
   const buttonStyle = (selected) => (
     classnames(baseGroupClasses, {
       [selectedGroupClasses]: selected,
-      [defaultGroupClasses]: selected,
+      [unselectedGroupClasses]: selected,
     })
     );
 
@@ -143,15 +141,25 @@ const OptionItemExpandable = ({ingredientGroup, category, options}) => {
     <div className="my-4">
       <button
           onClick={() => toggleExpansion()} 
-          className={buttonStyle(categorySelected)}>
-          <span className="text-lg font-medium">{ingredientGroup}</span>
+          className={buttonStyle(groupSelected)}>
+          <div className="flex justify-between items-center px-2 text-lg font-semibold">
+            <span>{ingredientGroup}</span>
+            <span>
+            {
+              groupSelected 
+              ? <ChevronUpIcon className="w-6 h-6 ml-2" />
+              : <ChevronDownIcon className="w-6 h-6 ml-2" />
+            }
+              
+              </span>
+          </div>
       </button>
       {
-        categorySelected 
-        ? <div className="bg-white shadow-lg rounded-b-lg divide-y divide-gray-300 -mt-2">
+        groupSelected 
+        ? <div className={sectionBgFlatTopStyle}>
         {
           options.map((filter, i) => {
-            const filterIsSelected = isOptionItemSelected(filter);
+            const filterIsSelected = isOptionItemSelected(filter, category);
     
             return <div key={`optionListItemExpandable_${i}`} 
                         className={`${defaultItemClasses} flex justify-between p-2`} 
@@ -173,6 +181,10 @@ const OptionItemExpandable = ({ingredientGroup, category, options}) => {
   )
 }
 
+const sectionBgStyle = classnames('p-4', 'shadow-sm', 'bg-gray-50');
+const sectionBgFlatTopStyle = classnames(sectionBgStyle, 'rounded-b-2xl', 'rounded-tr-xl', 'mb-6', 'divide-y', 'divide-gray-300');
+const sectionHeaderStyle = classnames('w-32', 'text-xl', 'p-4', 'font-bold', 'flex', 'justify-center', 'items-center', 'bg-red-400', 'text-white', 'rounded-t-lg', 'rounded-b-none'); //this is a the same as selectedGroupClasses above
+
 const OptionList = ({category, options, dataType}) => {
     const { readOnlyFilters } = useSelectedFiltersState(); 
     const optionsCopy = lang.clone(options)
@@ -193,18 +205,21 @@ const OptionList = ({category, options, dataType}) => {
           }, {})
 
           return (
-            <>
-            {
+            <div className="my-4">
+
+            { /* outer list (letter groups) */
                 Object.entries(groupedByFirstLetter)
                     .map(([letter, optionList], i) => ( //<-- note: the array here is a destructuring of the Object.entries() return val, which is an array; the first val is groupedByFirstLetter's KEY; the second val is groupedByFirstLetter[key], which is an array 
-                        <div key={`optionList_${i}`} className="p-4 rounded-2xl my-6 bg-white">
-                            <h3 className="m-3 text-3xl text-yellow-500 font-extrabold">{letter.toUpperCase()}</h3>
-                            <div className="space-y-2">
-                            {
+                        <div key={`optionList_${i}`}>
+                          <div className={sectionHeaderStyle}>
+                            <p>{letter.toUpperCase()}</p>
+                          </div>
+                            <div className={sectionBgFlatTopStyle}>
+                            { /* inner list (the filters themselves) */
                                 optionList.map((filter, j) => {
                                     const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
                                     return (
-                                        <div key={`optionListItem_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
+                                        <div key={`optionListItem_${j}`}>
                                             <OptionItem category={category} filter={filter} isSelected={isSelected} >
                                                 {capitalize(filter).replace(/_/g, " ")}
                                             </OptionItem>
@@ -216,18 +231,17 @@ const OptionList = ({category, options, dataType}) => {
                         </div>
                     ))
             }
-            </>
+            </div>
           )
-      } else if (dataType === "LIST" && category === "texture") { // for the textures, just display items ungroups
+      } else if (dataType === "LIST" && category === "texture") { // for the textures, just display items ungrouped
 
         return (
-          <div className="w-full p-4 rounded-xl my-6">
-          <div className="flex flex-wrap ">
+          <div className={classnames(sectionBgStyle, 'rounded-2xl', 'divide-y', 'divide-gray-300')}>
           {
             optionsCopy.map((filter, j) => {
                   const isSelected = readOnlyFilters[category] && readOnlyFilters[category].includes(filter);
                   return (
-                      <div key={`optionListItem_${j}`} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mr-3">
+                      <div key={`optionListItem_${j}`}>
                           <OptionItem category={category} filter={filter} isSelected={isSelected} >
                               {capitalize(filter).replace(/_/g, " ")}
                           </OptionItem>
@@ -235,7 +249,6 @@ const OptionList = ({category, options, dataType}) => {
                   )
               })
           }
-          </div>
       </div>
         )
       }

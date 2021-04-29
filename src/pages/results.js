@@ -145,7 +145,11 @@ const ResultsDisplay = ({data, sortResults, totalCount, offset, loadMore}) => {
             }
           </div>
           
-          <Btn onClick={loadMore}>Load More Results</Btn>
+          <div className="my-6 flex justify-center">
+            <Btn onClick={loadMore}>Load More Results</Btn>
+          </div>
+
+          
         </div>
           )
 }
