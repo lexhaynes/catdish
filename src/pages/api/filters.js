@@ -4,8 +4,8 @@ import dbConnect from '@utils/dbConnect';
 const handler = async (req, res) => {
 
 
-    const { texture, brand, include, exclude } = req.query;
-
+    const { texture, brand, include, exclude, offset, limit } = req.query;
+    
     
     const queryArr = [];
 
@@ -47,8 +47,10 @@ const handler = async (req, res) => {
     //add error handling if DB does not connect
     try {
         await dbConnect();
-        const results = await WetFood.find().and(queryArr).select('brand product_line flavor texture -_id').lean();
-        res.status(200).json(results)
+        const results = await WetFood.find().and(queryArr).select('brand product_line flavor texture -_id').skip(Number(offset)).limit(Number(limit)).lean();
+       const count = await WetFood.find().and(queryArr).select('brand product_line flavor texture -_id').countDocuments();
+       
+        res.status(200).json({results, count})
     } catch(error) {
         res.status(500).json(error)
     }

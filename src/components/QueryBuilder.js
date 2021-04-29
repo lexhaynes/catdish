@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { SearchIcon } from '@heroicons/react/solid'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
-import Button from '@components/Button'
+import Btn from '@components/Btn'
 import { useSelectedFiltersUpdate, useSelectedFiltersState } from '@context/selectedFilters'
 import { getNavPath } from '@utils/data'
 import { capitalize } from '@utils/misc'
@@ -348,15 +348,15 @@ const QueryBuilder = ({tabName, optionList, dataType}) => {
                   ?  <OptionList category={tabName} options={filteredOptions} dataType={dataType} clearSearch={clearSearch}  />
                   :   <>
                           <p className="italic">No results match your search.</p>
-                          <Button variant="link" onClick={() => clearSearch()}> 
+                          <Btn variant="link" onClick={() => clearSearch()}> 
                               Clear search terms
-                          </Button>
+                          </Btn>
                       </>
           }
     
             <div className="my-12 flex justify-center">
                 <Link href={resultsTabPageLink} passHref>
-                    <a><Button>Get Results</Button></a>
+                    <a><Btn>Get Results</Btn></a>
                 </Link>
             </div>   
         </>

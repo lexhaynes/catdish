@@ -7,41 +7,51 @@ import { useSelectedFiltersState } from '@context/selectedFilters'
 import PropTypes from 'prop-types';
 import ErrorDisplay from '@components/ErrorDisplay'
 import Loading from '@components/Loading'
+import Btn from '@components/Btn'
 import { ViewGridIcon, ViewListIcon, SortAscendingIcon, SortDescendingIcon} from '@heroicons/react/outline';
 
 const apiPath = '/api/filters?';
-
+const LIMIT = 10; //limit of values returned by DB
 
 /* fetch data from server*/
-const ResultsData = ({query}) => {
-  const endpoint = apiPath+query;
+const ResultsData = ({query, offset, setOffset}) => {
+  const endpoint = `${apiPath}${query}&offset=${offset}&limit=${LIMIT}`;
   const [sortOrder, setSortOrder] = useState('')
   const [results, setResults] = useState(null)
+  const [totalResultsCount, setTotalResultsCount] = useState(null)
   const [httpState, setHttpState] = useState()
 
   /* @param order: can be "asc" or "dsc" */
   const sortResults = (order) => setSortOrder(order);
 
-  //make data request on page load
-  useEffect(() => {
+  const requestData = () => {
     axios.get(endpoint)
     .then((response) => {
-      if (response.data.length < 1) {
+      const { results, count } = response.data;
+      if (results.length < 1) {
         setHttpState("no_match_error");
       } else {
-        setResults(response.data);
+        setResults(prevResults => ([...prevResults, ...results]));
+        setTotalResultsCount(count);
+        setOffset(prevOffset => prevOffset + LIMIT)
         setHttpState("ok");
+
       }
     })
     .catch((error) => {
       // handle error
       setHttpState("request_error");
-      console.log(error);
+      console.log("request error: ", error);
     })
   /*  .then(function () {
       // always executed
     });
   */
+  }
+
+  //make data request on page load
+  useEffect(() => {
+    requestData()
   }, [])
 
    //when sortOrder changes, sort results
@@ -57,7 +67,7 @@ const ResultsData = ({query}) => {
   if (httpState === "no_match_error") return <ResultsError variant="no_match" />
 
   if (httpState === "ok") {
-    return <ResultsDisplay data={results} sortResults={sortResults} /> 
+    return <ResultsDisplay data={results} sortResults={sortResults} totalCount={totalResultsCount} offset={offset} loadMore={requestData} /> 
   }
 
   return (
@@ -72,7 +82,7 @@ ResultsData.propTypes = {
 
 /* render data */
 
-const ResultsDisplay = ({data, sortResults}) => {
+const ResultsDisplay = ({data, sortResults, totalCount, offset, loadMore}) => {
   //set results display to grid or list
   const [displayType, setDisplayType] = useState('list')
 
@@ -105,7 +115,7 @@ const ResultsDisplay = ({data, sortResults}) => {
             
             <ResultsDisplayControl currentDisplay={displayType} setDisplay={setDisplayType} />
             <SortBy sortResults={sortResults} />
-            <ResultsCountHeader count={data.length} />
+            <ResultsCountHeader count={totalCount} offset={offset} />
           </div>
                    
 
@@ -126,7 +136,7 @@ const ResultsDisplay = ({data, sortResults}) => {
                       {texture}
                     </p>
                     {/* <div className="pt-2 sm:pt-0 flex">
-                      <Button>Buy on Chewy</Button>
+                      <Btn>Buy on Chewy</Btn>
                     </div> */}
 
                   </div>
@@ -134,6 +144,8 @@ const ResultsDisplay = ({data, sortResults}) => {
               ))
             }
           </div>
+          
+          <Btn onClick={loadMore}>Load More Results</Btn>
         </div>
           )
 }
@@ -162,7 +174,7 @@ const ResultsError = ({variant}) => {
 
     default:
       heading = "Something went wrong."
-      subheading = "Please try refreshing the page. Don't worry, you won't lose your filters."
+      subheading = "Please refresh the page. You won't lose your filters."
     break;
 
   }
@@ -244,18 +256,17 @@ const SortBy = ({sortResults}) => {
   )
 }
 
-const ResultsCountHeader = ({count}) => {
+const ResultsCountHeader = ({count, offset}) => {
   return (
     <div className="w-1/3 text-right">
-    TODO: display n out of total
-      <p><strong>{count}</strong> result{count > 1 && 's'} match{count <= 1 && 'es'} your query</p>
+      <p>Dispalying <strong>{offset}</strong> of <strong>{count}</strong> {`match${count === 1 ? '' : 'es'}`}</p>
     </div>
   )
 } 
 
 const ResultsPage = () => {
   const { filterQuery, filterCount } = useSelectedFiltersState();
-
+  const [queryOffset, setQueryOffset] = useState(0); //the index at which the query will start searching colletion
   return (
       <TabPage title="CatDish: Results">
 
@@ -267,7 +278,7 @@ const ResultsPage = () => {
 
         {
           filterCount > 0  
-            ? <ResultsData query={filterQuery} /> 
+            ? <ResultsData query={filterQuery} offset={queryOffset} setOffset={setQueryOffset} /> 
             : <ResultsError variant="no_filters" />
         }
         

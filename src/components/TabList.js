@@ -2,7 +2,7 @@ import {useState} from 'react'
 import querystring from 'querystring'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
-import Button from '@components/Button'
+import Btn from '@components/Btn'
 import { useRouter } from 'next/router'
 
 const TabList = ({activeTab, tabs}) => {
@@ -15,12 +15,12 @@ const TabList = ({activeTab, tabs}) => {
                     <span key={`tablist_${i}`} className="mr-2">
                         <Link href={tab.path + '/?' + querystring.stringify(router.query)} scroll={false} passHref>
                             <a>
-                            <Button 
+                            <Btn 
                                 variant="tab" 
                                 active={tab.name === activeTab}
                                 >
                                 {tab.displayName}
-                            </Button>
+                            </Btn>
                             </a>
                         </Link>
                     </span>

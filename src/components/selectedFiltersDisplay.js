@@ -1,4 +1,4 @@
-import Button from '@components/button'
+import Btn from '@components/Btn'
 import {capitalize} from '@utils/misc'
 import { 
   useSelectedFiltersState, 
@@ -63,13 +63,13 @@ const SelectedFiltersDisplay = () => {
                       filterList.map( (filter, i) => (
                         <span key={`filter-${category}_${i}`} className="mr-2 mb-2">
                         
-                        <Button 
+                        <Btn 
                           variant="pill" 
                           onClick={ () => deleteFilter(category, filter)}
                           icon={<>&#215;</>}
                         >
                           <FormatBtnLabel category={category} filter={filter} />
-                        </Button>
+                        </Btn>
 
                         </span>
                       ))
@@ -79,9 +79,9 @@ const SelectedFiltersDisplay = () => {
               
               <div className="flex w-64 justify-between ml-1">
                 <p className="text-semibold"><strong>{filterCount}</strong>{` filter${filterCount > 1 ? 's' :'' } selected`}</p>
-                <Button variant="link" onClick={() => deleteAllFilters()}> 
+                <Btn variant="link" onClick={() => deleteAllFilters()}> 
                   Clear all filters
-                </Button>
+                </Btn>
               </div>
             </>
         }
