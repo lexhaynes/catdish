@@ -57,7 +57,8 @@ const ResultsData = ({query, offset, setOffset}) => {
 
   //make data request whenever query changes
   useEffect(() => {
-    requestData()
+/*     console.log("request data ", query);
+ */    requestData()
   }, [query])
 
    //when sortOrder changes, sort results
@@ -335,10 +336,6 @@ const ResultsCountHeader = ({count, offset}) => {
 const ResultsPage = () => {
   const { filterQuery, filterCount } = useSelectedFiltersState();
   const [queryOffset, setQueryOffset] = useState(0); //the index at which the query will start searching colletion
-
-  useEffect(() => {
-    console.log("filter query is ", filterQuery);
-  }, [])
 
   return (
       <TabPage title="CatDish: Results">
