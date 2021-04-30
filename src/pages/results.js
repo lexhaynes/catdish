@@ -8,6 +8,10 @@ import ErrorDisplay from '@components/ErrorDisplay'
 import Loading from '@components/Loading'
 import Btn from '@components/Btn'
 import { ViewGridIcon, ViewListIcon, SortAscendingIcon, SortDescendingIcon} from '@heroicons/react/outline';
+import { InformationCircleIcon } from '@heroicons/react/solid'
+import { XCircleIcon } from '@heroicons/react/outline'
+
+
 
 const apiPath = '/api/filters?';
 const LIMIT = 10; //limit of values returned by DB
@@ -17,6 +21,7 @@ const ResultsData = ({query, offset, setOffset}) => {
   const endpoint = `${apiPath}${query}&offset=${offset}&limit=${LIMIT}`;
   const [sortOrder, setSortOrder] = useState('')
   const [results, setResults] = useState(null)
+  const [ingredients, setIngredients] = useState(null)
   const [totalResultsCount, setTotalResultsCount] = useState(null)
   const [httpState, setHttpState] = useState()
 
@@ -26,11 +31,13 @@ const ResultsData = ({query, offset, setOffset}) => {
   const requestData = () => {
     axios.get(endpoint)
     .then((response) => {
-      const { results, count } = response.data;
+      const { results, count, ingredients } = response.data;
       if (results.length < 1) {
         setHttpState("no_match_error");
       } else {
+
         setResults(prevResults => ([...prevResults, ...results]));
+        setIngredients(ingredients);
         setTotalResultsCount(count);
         setOffset(prevOffset => prevOffset + LIMIT)
         setHttpState("ok");
@@ -50,7 +57,6 @@ const ResultsData = ({query, offset, setOffset}) => {
 
   //make data request whenever query changes
   useEffect(() => {
-    console.log('requesting data ');
     requestData()
   }, [query])
 
@@ -67,7 +73,7 @@ const ResultsData = ({query, offset, setOffset}) => {
   if (httpState === "no_match_error") return <ResultsError variant="no_match" />
 
   if (httpState === "ok") {
-    return <ResultsDisplay data={results} sortResults={sortResults} totalCount={totalResultsCount} offset={offset} loadMore={requestData} /> 
+    return <ResultsDisplay data={results} ingredients={ingredients} sortResults={sortResults} totalCount={totalResultsCount} offset={offset} loadMore={requestData} /> 
   }
 
   return (
@@ -79,9 +85,19 @@ const ResultsData = ({query, offset, setOffset}) => {
 
 /* render data */
 
-const ResultsDisplay = ({data, sortResults, totalCount, offset, loadMore}) => {
+const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loadMore}) => {
   //set results display to grid or list
   const [displayType, setDisplayType] = useState('list')
+  const [ingredientsShowing, setIngredientsShowing] = useState([])
+
+  const toggleIngredients = (id) => {
+    //either remove the ID from state or add it in
+    const newState = ingredientsShowing.indexOf(id) > -1
+                    ? ingredientsShowing.filter(item => item !== id)
+                    : [...ingredientsShowing, id] 
+    
+      setIngredientsShowing(newState);
+  }
 
   //set all the classes for data display
   const gridDisplayClasses = classnames('grid', 'grid-cols-1', 'gap-2', 'sm:grid-cols-2', 'sm:gap-6', 'justify-between');
@@ -95,12 +111,12 @@ const ResultsDisplay = ({data, sortResults, totalCount, offset, loadMore}) => {
     })
   );
 
-  const gridItemClasses = classnames('border', 'border-gray-100', 'mb-6 p-4', 'rounded-md');
-  const listItemClasses = classnames('pt-6', 'mb-2');
+  const gridItemClasses = classnames('GRID', 'border', 'border-gray-100', 'mb-6 p-4', 'rounded-md');
+  const listItemClasses = classnames('LIST', 'md:justify-between', 'md:flex-row', 'pt-6', 'mb-2');
 
   //compose resultsData item  styles based on viewType (grid or list)
   const itemStyle = (viewType) => (
-    classnames('flex', 'flex-col', 'sm:flex-row', {
+    classnames('flex', 'flex-col', {
       [gridItemClasses]: viewType === "grid",
       [listItemClasses]: viewType === "list",
     })
@@ -118,27 +134,43 @@ const ResultsDisplay = ({data, sortResults, totalCount, offset, loadMore}) => {
 
           <div className={displayStyle(displayType)}>
             {
-              data.map( ({brand, product_line, flavor, texture}, i) => (
-                <div key={`result_${i}`} className={itemStyle(displayType)}>
+              data.map( ({brand, product_line, flavor, texture, _id}, i) => {
+                return <div key={`result_${i}`} className={itemStyle(displayType)}>
 
-                {/* LEFT SIDE OF CARD image will go here */}
-                  {/* <div className="w-full h-32 mb-3 sm:mx-0 sm:w-52 sm:h-30 bg-gray-100 rounded-sm flex-grow-0"></div> */}
-                
-                {/* RIGHT SIDE OF CARD */}
-                  <div className="ml-3">
+        
+                {/* LEFT SIDE OF CARD */}
+                  <div className="card-left">
                     <p className="font-bold text-xl mb-1">{brand}</p>
                     <p className="text-lg mb-1">{product_line}</p>
                     <p className="italic mb-3">{flavor}</p>
                     <p className="mb-6 px-3 py-1 rounded-2xl bg-red-100 inline-block text-sm">      
                       {texture}
                     </p>
-                    {/* <div className="pt-2 sm:pt-0 flex">
-                      <Btn>Buy on Chewy</Btn>
-                    </div> */}
-
                   </div>
+
+                  {/* RIGHT SIDE OF CARD  */}
+                    <div className="card-right w-full md:w-1/2">
+                        {
+                          ingredientsShowing.indexOf(_id) > -1 
+                            ? <div>
+                                <p className="float-right w-8 h-8 p-1 cursor-pointer rounded-md hover:bg-gray-200 transition"
+                                  onClick={() => toggleIngredients(_id)}>
+                                  <XCircleIcon />
+                                </p>
+                                <IngredientsDisplay data={ingredients[_id]} />
+                              </div>
+                              
+                            : <p className="float-right w-8 h-8 p-1 cursor-pointer rounded-md hover:bg-gray-200 transition"
+                                onClick={() => toggleIngredients(_id)}>
+                                <InformationCircleIcon />
+                            </p>
+                           
+                        }
+                        
+                    </div>
+
                 </div>
-              ))
+              })
             }
           </div>
           
@@ -151,6 +183,17 @@ const ResultsDisplay = ({data, sortResults, totalCount, offset, loadMore}) => {
           )
 }
 
+const IngredientsDisplay = ({data}) => {
+  return (
+    <div className="rounded-lg p-6 bg-gray-50">
+     {
+        data.map((item, i) => (
+          <span key={`ingredient_${i}`}>{`${item}${i !== data.length - 1 ? ', ' : ''}`}</span>
+        ))
+      } 
+    </div>
+  )
+}
 
 const ResultsError = ({variant}) => {
 
@@ -260,7 +303,7 @@ const SortBy = ({sortResults}) => {
 const ResultsCountHeader = ({count, offset}) => {
   return (
     <div className="w-1/3 text-right">
-      <p>Displaying <strong>{offset}</strong> of <strong>{count}</strong> {`match${count === 1 ? '' : 'es'}`}</p>
+      <p>Displaying <strong>{count < offset ? count : offset}</strong> of <strong>{count}</strong> {`match${count === 1 ? '' : 'es'}`}</p>
     </div>
   )
 } 
@@ -268,6 +311,10 @@ const ResultsCountHeader = ({count, offset}) => {
 const ResultsPage = () => {
   const { filterQuery, filterCount } = useSelectedFiltersState();
   const [queryOffset, setQueryOffset] = useState(0); //the index at which the query will start searching colletion
+
+  useEffect(() => {
+    console.log("filter query is ", filterQuery);
+  }, [])
 
   return (
       <TabPage title="CatDish: Results">

@@ -1,3 +1,4 @@
+import object from 'lodash/object';
 import WetFood from '@models/WetFood';
 import dbConnect from '@utils/dbConnect';
 
@@ -47,10 +48,42 @@ const handler = async (req, res) => {
     //add error handling if DB does not connect
     try {
         await dbConnect();
-        const results = await WetFood.find().and(queryArr).select('brand product_line flavor texture -_id').skip(Number(offset)).limit(Number(limit)).lean();
-       const count = await WetFood.find().and(queryArr).select('brand product_line flavor texture -_id').countDocuments();
+        
+        const ingredientsData = await WetFood.find()
+            .and(queryArr)
+            .select('-brand -product_line -flavor -texture')
+            .lean();
+
+
+        //return an object of arrays; each array contains ingredients whose values in the above object were 'Yes'
+        //TODO: try to accomplish this in the query itself...
+        const ingredients = ingredientsData.reduce( (acc, currentVal) => {
+            const currentId = currentVal['_id'];
+            const pickedIngredents = object.pickBy(currentVal, (value, key) => {
+                return typeof value === 'string' && value.toLowerCase() === "yes"
+                });
+    
+            const ingredientList = Object.keys(pickedIngredents);
+
+
+            if (!acc[currentId]) acc[currentId] = [];
+            acc[currentId].push(...ingredientList);
+            return acc;
+        }, {}) 
+
+     
+
+        const results = await WetFood.find()
+            .and(queryArr).select('brand product_line flavor texture')
+            .skip(Number(offset))
+            .limit(Number(limit)).lean();
+
+       const count = await WetFood.find()
+                        .and(queryArr)
+                        .select('brand product_line flavor texture -_id')
+                        .countDocuments();
        
-        res.status(200).json({results, count})
+        res.status(200).json({results, count, ingredients})
     } catch(error) {
         res.status(500).json(error)
     }
