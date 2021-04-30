@@ -20,11 +20,12 @@ export function SelectedFiltersProvider({ children }) {
 
 
   //when URL changes, update the filterCount
-  useEffect(() => {     
+  useEffect(() => {    
     setReadOnlyFilters(() => state.getFiltersFromUrl())
   }, [router.query])
 
   useEffect(() => {
+    //update filter query and count
     setFilterQuery(() => state.getQueryFromFilters())
     setFilterCount(() => state.countFilters());
   }, [readOnlyFilters])
@@ -114,7 +115,8 @@ export function SelectedFiltersProvider({ children }) {
     //delete all filters from the URL
     deleteAllFilters: () => {
       router.push(router.pathname+`/`);
-    } 
+    },
+
   };
 
   return (

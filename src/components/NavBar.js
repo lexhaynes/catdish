@@ -1,41 +1,32 @@
-import Link from 'next/link'
 import Logo from '@components/Logo'
-import useComponentVisible from '@hooks/useComponentVisible'
-import navData from '@data/nav.json'
+import styles from '@styles/TabPage.module.scss'
+import Link from 'next/link'
+import classnames from 'tailwindcss-classnames'
 
-const navLinks = navData.filter(item => item.id !== "home");
-
-
-const Navbar = () => {
-    const {ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
-
-
-    const toggleMenu = () => setIsComponentVisible(!isComponentVisible)
-
+const Navbar = ({ links }) => {
 
     return (
-        <header className={`navbar w-full py-2 transition duration-150 bg-white`} >
-        <nav role="navigation" className="w-11/12 py-3 mx-auto" aria-label="main navigation">
-          <div className="container flex justify-between items-center">
-  
-            <div className="navbar-left flex justify-between items-center">
-              <div className="brand font-bold text-2xl">
-                  <Link href="/" passHref>
-                    <a>
-                        <Logo />
-                    </a>
-                  </Link>
-                 
-              </div>
-            </div>
-  
-          </div>
+      <header className={classnames('z-50', 'pt-3', 'bg-white', 'top-0', 'flex', 'flex-col', 'md:flex-row',
+          {
+              [styles.border + ' sticky'] : links,
+              ['h-16'] : !links
+          }
+      )}>
+        {/* header left */}
+        <div className='-mt-1  ml-4 md:absolute'>
+            <Link href="/" passhref>
+                <Logo  />   
+            </Link>
+        </div>
 
- 
-        </nav>
+        { /* header right */
+            links && <div className='sm:w-7/12 md:w-5/12 mx-auto'>
+                            {links}
+                        </div>
+        }
     </header>
     )
 }
-
+  
 
 export default Navbar

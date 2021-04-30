@@ -4,7 +4,6 @@ import collection from 'lodash/collection'
 import {classnames} from 'tailwindcss-classnames';
 import TabPage from '@layouts/TabPage'
 import { useSelectedFiltersState } from '@context/selectedFilters'
-import PropTypes from 'prop-types';
 import ErrorDisplay from '@components/ErrorDisplay'
 import Loading from '@components/Loading'
 import Btn from '@components/Btn'
@@ -49,10 +48,11 @@ const ResultsData = ({query, offset, setOffset}) => {
   */
   }
 
-  //make data request on page load
+  //make data request whenever query changes
   useEffect(() => {
+    console.log('requesting data ');
     requestData()
-  }, [])
+  }, [query])
 
    //when sortOrder changes, sort results
   useEffect(() => {
@@ -75,9 +75,6 @@ const ResultsData = ({query, offset, setOffset}) => {
       <Loading />
     </div>
   )
-}
-ResultsData.propTypes = {
-  query: PropTypes.string.isRequired,
 }
 
 /* render data */
@@ -263,7 +260,7 @@ const SortBy = ({sortResults}) => {
 const ResultsCountHeader = ({count, offset}) => {
   return (
     <div className="w-1/3 text-right">
-      <p>Dispalying <strong>{offset}</strong> of <strong>{count}</strong> {`match${count === 1 ? '' : 'es'}`}</p>
+      <p>Displaying <strong>{offset}</strong> of <strong>{count}</strong> {`match${count === 1 ? '' : 'es'}`}</p>
     </div>
   )
 } 
@@ -271,6 +268,7 @@ const ResultsCountHeader = ({count, offset}) => {
 const ResultsPage = () => {
   const { filterQuery, filterCount } = useSelectedFiltersState();
   const [queryOffset, setQueryOffset] = useState(0); //the index at which the query will start searching colletion
+
   return (
       <TabPage title="CatDish: Results">
 
