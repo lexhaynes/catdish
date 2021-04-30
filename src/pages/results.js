@@ -8,7 +8,7 @@ import ErrorDisplay from '@components/ErrorDisplay'
 import Loading from '@components/Loading'
 import Btn from '@components/Btn'
 import { ViewGridIcon, ViewListIcon, SortAscendingIcon, SortDescendingIcon} from '@heroicons/react/outline';
-import { InformationCircleIcon } from '@heroicons/react/solid'
+import { ExclamationCircleIcon, PlusCircleIcon } from '@heroicons/react/solid'
 import { XCircleIcon } from '@heroicons/react/outline'
 
 
@@ -149,22 +149,29 @@ const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loa
                   </div>
 
                   {/* RIGHT SIDE OF CARD  */}
-                    <div className="card-right w-full md:w-1/2">
+                    <div className="card-right w-full md:w-1/2 items-end relative">
                         {
                           ingredientsShowing.indexOf(_id) > -1 
-                            ? <div>
-                                <p className="float-right w-8 h-8 p-1 cursor-pointer rounded-md hover:bg-gray-200 transition"
+                            ? <div className="flex justify-end items-start">
+                              <p className="absolute w-8 h-8 p-1 cursor-pointer rounded-md hover:bg-gray-200 transition"
                                   onClick={() => toggleIngredients(_id)}>
                                   <XCircleIcon />
-                                </p>
-                                <IngredientsDisplay data={ingredients[_id]} />
-                              </div>
+                              </p>
+                              <IngredientsDisplay data={ingredients[_id]} id={_id} />
+                            </div>
                               
-                            : <p className="float-right w-8 h-8 p-1 cursor-pointer rounded-md hover:bg-gray-200 transition"
-                                onClick={() => toggleIngredients(_id)}>
-                                <InformationCircleIcon />
-                            </p>
-                           
+                              
+                            : <div className="flex justify-end items-center">
+                                {/* inner wrapper specifically for bg on hover */}
+                                <div className="flex justify-end items-center cursor-pointer rounded-md hover:bg-gray-200 transition px-3" 
+                                     onClick={() => toggleIngredients(_id)}>
+                                  <span className="font-semibold pr-2">See Ingredients</span>
+                                    <p className="w-8 h-8 p-1">
+                                        <PlusCircleIcon />
+                                    </p>
+                                </div>
+                              
+                            </div>                           
                         }
                         
                     </div>
@@ -183,14 +190,31 @@ const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loa
           )
 }
 
-const IngredientsDisplay = ({data}) => {
+const IngredientsDisplay = ({data, id}) => {
+  const reportItem = () => {
+    alert("TODO: report item");
+  }
   return (
     <div className="rounded-lg p-6 bg-gray-50">
-     {
-        data.map((item, i) => (
-          <span key={`ingredient_${i}`}>{`${item}${i !== data.length - 1 ? ', ' : ''}`}</span>
-        ))
-      } 
+      <div className="rounded-md p-3 mt-3 bg-white">
+        {
+          data.map((item, i) => (
+            <span key={`ingredient_${i}`}>{`${item}${i !== data.length - 1 ? ', ' : ''}`}</span>
+          ))
+        } 
+      </div>
+
+      <div className="flex mt-3 items-center">
+        {/* inner wrapper for bg hover */}
+        <div className="flex justify-end items-center cursor-pointer rounded-md hover:bg-gray-200 transition px-3" 
+             onClick={reportItem}>
+          <p className="w-8 h-8 p-1 mr-2 transition">
+          <ExclamationCircleIcon />
+          </p>
+          <p>Report an inaccuracy</p>
+        </div>
+ 
+      </div>
     </div>
   )
 }
