@@ -2,8 +2,7 @@ module.exports = {
   purge: ['.src/pages/**/*.{js,ts,jsx,tsx}', '.src/components/**/*.{js,ts,jsx,tsx}', '.src/layouts/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {
-    },
+
     minHeight: {
       '0': '0',
       '1/4': '25%',
@@ -15,7 +14,10 @@ module.exports = {
      }
   },
   variants: {
-    borderWidth: ['responsive', 'hover', 'focus']
+    borderWidth: ['responsive', 'hover', 'focus'],
+    extend: {
+      backgroundColor: ['odd'],
+    },
   },
   plugins: []
 }

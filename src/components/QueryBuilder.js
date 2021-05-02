@@ -181,7 +181,7 @@ const OptionItemExpandable = ({ingredientGroup, category, options}) => {
   )
 }
 
-const sectionBgStyle = classnames('p-4', 'shadow-sm', 'bg-gray-50');
+const sectionBgStyle = classnames('p-5', 'shadow-sm', 'bg-gray-100');
 const sectionBgFlatTopStyle = classnames(sectionBgStyle, 'rounded-b-2xl', 'rounded-tr-xl', 'mb-6', 'divide-y', 'divide-gray-300');
 const sectionHeaderStyle = classnames('w-32', 'text-xl', 'p-4', 'font-bold', 'flex', 'justify-center', 'items-center', 'bg-red-400', 'text-white', 'rounded-t-lg', 'rounded-b-none'); //this is a the same as selectedGroupClasses above
 

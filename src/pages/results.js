@@ -7,9 +7,10 @@ import { useSelectedFiltersState } from '@context/selectedFilters'
 import ErrorDisplay from '@components/ErrorDisplay'
 import Loading from '@components/Loading'
 import Btn from '@components/Btn'
+import IconBtn from '@components/IconBtn'
 import { ViewGridIcon, ViewListIcon, SortAscendingIcon, SortDescendingIcon} from '@heroicons/react/outline';
 import { ExclamationCircleIcon, PlusCircleIcon } from '@heroicons/react/solid'
-import { XCircleIcon } from '@heroicons/react/outline'
+import { XCircleIcon, CollectionIcon } from '@heroicons/react/outline'
 
 
 
@@ -27,6 +28,11 @@ const ResultsData = ({query, offset, setOffset}) => {
 
   /* @param order: can be "asc" or "dsc" */
   const sortResults = (order) => setSortOrder(order);
+
+  /* group results by brand */
+  const groupResults = () => {
+    console.log("grouping results")
+  }
 
   const requestData = () => {
     axios.get(endpoint)
@@ -57,8 +63,9 @@ const ResultsData = ({query, offset, setOffset}) => {
 
   //make data request whenever query changes
   useEffect(() => {
-/*     console.log("request data ", query);
- */    requestData()
+  //  let isMounted = true;
+    requestData()
+    //return () => { isMounted = false };
   }, [query])
 
    //when sortOrder changes, sort results
@@ -74,7 +81,13 @@ const ResultsData = ({query, offset, setOffset}) => {
   if (httpState === "no_match_error") return <ResultsError variant="no_match" />
 
   if (httpState === "ok") {
-    return <ResultsDisplay data={results} ingredients={ingredients} sortResults={sortResults} totalCount={totalResultsCount} offset={offset} loadMore={requestData} /> 
+    return <ResultsDisplay data={results} 
+      ingredients={ingredients} 
+      groupResults={groupResults} 
+      sortResults={sortResults} 
+      totalCount={totalResultsCount} 
+      offset={offset} 
+      loadMore={requestData} /> 
   }
 
   return (
@@ -86,7 +99,7 @@ const ResultsData = ({query, offset, setOffset}) => {
 
 /* render data */
 
-const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loadMore}) => {
+const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCount, offset, loadMore}) => {
   //set results display to grid or list
   const [displayType, setDisplayType] = useState('list')
   const [ingredientsShowing, setIngredientsShowing] = useState([])
@@ -106,14 +119,14 @@ const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loa
 
   //compose resultsData container styles based on viewType (grid or list)
   const displayStyle = (viewType) => (
-    classnames('mt-10', {
+    classnames({
       [gridDisplayClasses]: viewType === "grid",
       [listDisplayClasses]: viewType === "list",
     })
   );
 
-  const gridItemClasses = classnames('GRID', 'border', 'border-gray-100', 'mb-6 p-4', 'rounded-md');
-  const listItemClasses = classnames('LIST', 'md:justify-between', 'md:flex-row', 'pt-6', 'mb-2');
+  const gridItemClasses = classnames('GRID', 'border',  'border-gray-100', 'mb-6 p-4', 'rounded-md');
+  const listItemClasses = classnames('LIST', 'p-4', 'mb-2', 'rounded-md', 'md:justify-between', 'md:flex-row');
 
   //compose resultsData item  styles based on viewType (grid or list)
   const itemStyle = (viewType) => (
@@ -125,13 +138,18 @@ const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loa
   
   return (
         <div className="container">
-          <div className="mb-6 flex justify-between items-center">
-            
-            <ResultsDisplayControl currentDisplay={displayType} setDisplay={setDisplayType} />
+          <div className="mb-3 pb-2 shadow-sm flex items-center">
+            <span className="mr-6">
+              <ResultsDisplayControl currentDisplay={displayType} setDisplay={setDisplayType} />
+
+            </span>
             <SortBy sortResults={sortResults} />
-            <ResultsCountHeader count={totalCount} offset={offset} />
+           {/*  <GroupBy groupResults={groupResults} /> */}
           </div>
                    
+          <div className="mt-10 mb-3 flex justify-end">
+            <ResultsCountHeader count={totalCount} offset={offset} />
+          </div>
 
           <div className={displayStyle(displayType)}>
             {
@@ -140,7 +158,7 @@ const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loa
 
         
                 {/* LEFT SIDE OF CARD */}
-                  <div className="card-left">
+                  <div className="card-left border border-red-500">
                     <p className="font-bold text-xl mb-1">{brand}</p>
                     <p className="text-lg mb-1">{product_line}</p>
                     <p className="italic mb-3">{flavor}</p>
@@ -150,10 +168,10 @@ const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loa
                   </div>
 
                   {/* RIGHT SIDE OF CARD  */}
-                    <div className="card-right w-full md:w-1/2 items-end relative">
+                    <div className="card-right border border-blue-500 w-full md:w-1/2 items-end relative">
                         {
                           ingredientsShowing.indexOf(_id) > -1 
-                            ? <div className="flex justify-end items-start">
+                            ? <div className="inline-flex justify-end items-start">
                               <p className="absolute w-8 h-8 p-1 cursor-pointer rounded-md hover:bg-gray-200 transition"
                                   onClick={() => toggleIngredients(_id)}>
                                   <XCircleIcon />
@@ -181,10 +199,14 @@ const ResultsDisplay = ({data, ingredients, sortResults, totalCount, offset, loa
               })
             }
           </div>
+          {
+            totalCount > LIMIT 
+            ? <div className="my-6 flex justify-center">
+               <Btn onClick={loadMore}>Load More Results</Btn>
+              </div>
+            : ''
+          }
           
-          <div className="my-6 flex justify-center">
-            <Btn onClick={loadMore}>Load More Results</Btn>
-          </div>
 
           
         </div>
@@ -196,7 +218,7 @@ const IngredientsDisplay = ({data, id}) => {
     alert("TODO: report item");
   }
   return (
-    <div className="rounded-lg p-6 bg-gray-50">
+    <div className="rounded-lg p-6 bg-gray-100">
       <div className="rounded-md p-3 mt-3 bg-white">
         {
           data.map((item, i) => (
@@ -254,27 +276,7 @@ const ResultsError = ({variant}) => {
 }
 
 
-const IconBtn = ({ tooltip, active, children, ...props}) => {
-  const [ tooltipVisible, setTooltipVisible ] = useState(false);
-  const toggleTooltip = () => {
-    setTooltipVisible(!tooltipVisible);
-  }
-  return (
-    <div className="relative">
-      <span 
-      {...props}
-        tabIndex={1} 
-        onMouseEnter={toggleTooltip}
-        onMouseLeave={toggleTooltip}
-        className={`${active ? 'bg-gray-100' :'' } flex justify-center items-center w-10 h-10 cursor-pointer px-2 ml-1 text-gray-500 hover:bg-gray-100 focus:bg-gray-200 rounded-lg`}>
-        {children}
-      </span>
-      <p className={`${tooltipVisible ? 'block': 'hidden'} absolute mt-1 -ml-2  text-xs w-auto whitespace-nowrap`}>{tooltip}</p>
 
-    </div>
-  
-  )
-}
 
 
 const ResultsDisplayControl = ({currentDisplay, setDisplay}) => {
@@ -287,16 +289,16 @@ const ResultsDisplayControl = ({currentDisplay, setDisplay}) => {
     <div className="flex justify-between items-center">
     <p className="font-semibold mr-2">Show items as: </p>
       <IconBtn 
-        tooltip="List View"
+        tooltipText="List View"
         onClick={()=>handleDisplay("grid")}
-        active={currentDisplay === "grid"}>
+        isActive={currentDisplay === "grid"}>
         <ViewGridIcon />
       </IconBtn>
          
       <IconBtn 
-        tooltip="Grid View"
+        tooltipText="Grid View"
         onClick={()=>handleDisplay("list")}
-        active={currentDisplay === "list"}>
+        isActive={currentDisplay === "list"}>
         <ViewListIcon />
       </IconBtn>
 
@@ -311,14 +313,29 @@ const SortBy = ({sortResults}) => {
       <p className="font-semibold mr-2">Sort items: </p>
           <IconBtn 
           onClick={()=>sortResults("asc")}
-          tooltip="Sort A - Z">
+          tooltipText="Sort A - Z">
         <SortAscendingIcon />
       </IconBtn>
 
       <IconBtn 
         onClick={()=>sortResults("desc")}
-        tooltip="Sort Z - A">
+        tooltipText="Sort Z - A">
         <SortDescendingIcon />
+      </IconBtn>
+    </div>
+
+  )
+}
+
+const GroupBy = ({groupResults}) => {
+
+  return (
+    <div className="flex justify-between items-center">
+      <p className="font-semibold mr-2">Group by brand </p>
+          <IconBtn 
+          onClick={()=>groupResults()}
+          tooltipText="">
+        <CollectionIcon />
       </IconBtn>
     </div>
 

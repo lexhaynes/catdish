@@ -109,12 +109,12 @@ export function SelectedFiltersProvider({ children }) {
   
 
       //update the url
-      router.push(router.pathname+`/?` + querystring.stringify(newQuery), undefined, {scroll:false, shallow:true})
+      router.push(router.pathname+`/?` + querystring.stringify(newQuery), undefined, {scroll:false})
 
     },
     //delete all filters from the URL
     deleteAllFilters: () => {
-      router.push(router.pathname+`/`);
+      router.push(router.pathname+`/`, undefined, {scroll:false});
     },
 
   };

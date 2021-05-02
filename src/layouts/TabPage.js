@@ -1,10 +1,9 @@
-import {useEffect, useState, useRef} from 'react'
+import {useEffect, useState} from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import AppShell from '@layouts/AppShell'
 import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
 import Navbar from '@components/Navbar'
-import TabList from '@components/TabList'
 import navData from '@data/nav.json'
 
 const TabPage = ({ title, children }) => {
@@ -31,13 +30,12 @@ const TabPage = ({ title, children }) => {
             
             {/* Tab View Section */ }           
              <section className="mx-auto h-full">
-
-                          
-               <Navbar links={ <TabList activeTab={activeTab} tabs={tabs} /> } />
+     
+               <Navbar activeTab={activeTab} tabs={tabs} />
 
                 <div className="overflow-hidden">       
                     <article className={`relative mb-10 py-6 mx-auto bg-red-400 z-20`}>
-                        <div className="sm:w-11/12 lg:w-2/3 mx-auto">
+                        <div className="w-11/12 lg:w-2/3 mx-auto">
                             <SelectedFiltersDisplay />
                         </div>
                     </article>
@@ -48,7 +46,7 @@ const TabPage = ({ title, children }) => {
                     
                     {/* Data Display Section */ }  
                     <article className="mb-4 -mt-20">
-                        <div className="sm:w-11/12 lg:w-2/3 mx-auto rounded-xl">
+                        <div className="w-11/12 lg:w-2/3 mx-auto rounded-xl">
                             {children}
                         </div>
                     </article>

@@ -53,8 +53,8 @@ const SelectedFiltersDisplay = () => {
 
     return (
       <>
-{/*         <h2 className="text-2xl font-bold tracking-wide mb-5">Current Filters</h2>
- */}
+         <h2 className="text-2xl font-bold tracking-wide mb-5 text-red-50">Current Filters</h2>
+ 
         {  
             <>
               <div className="flex space-between flex-wrap my-4">
@@ -77,7 +77,7 @@ const SelectedFiltersDisplay = () => {
                 }
               </div>
               
-              <div className="flex w-64 justify-between ml-1">
+              <div className="flex w-64 justify-between ml-1 text-gray-800">
                 <p className="text-semibold"><strong>{filterCount}</strong>{` filter${filterCount > 1 ? 's' :'' } selected`}</p>
                 <Btn variant="link" onClick={() => deleteAllFilters()}> 
                   Clear all filters
