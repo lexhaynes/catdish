@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import classnames from 'tailwindcss-classnames'
+import {classnames} from 'tailwindcss-classnames'
 
 const Logo =  React.forwardRef(({color = "pink", href, onClick}, ref) => {
     const style = classnames('w-24', 'h-8', 'cursor-pointer');

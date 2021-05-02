@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import classnames from 'tailwindcss-classnames'
+import {classnames} from 'tailwindcss-classnames'
 
 /*
     @param tooltip : tooltip text
