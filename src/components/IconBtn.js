@@ -11,7 +11,7 @@ const IconBtn = ({ tooltipText, tooltipPosition = 'top', isActive, children, ...
       setTooltipVisible(!tooltipVisible);
     }
 
-    const iconStyles = classnames('flex justify-center items-center w-10 h-10 cursor-pointer px-2 ml-1 text-gray-500 hover:bg-gray-200 focus:bg-gray-200 rounded-lg `', 
+    const iconStyles = classnames('flex justify-center items-center w-10 h-10 cursor-pointer px-2 ml-1 text-gray-500 hover:bg-gray-200 focus:bg-gray-200 rounded-lg ', 
     {
         ['bg-gray-200']: isActive,
     });
