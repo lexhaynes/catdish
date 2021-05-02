@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {classnames} from 'tailwindcss-classnames'
-
+import styles from '@styles/IconBtn.module.css'
 /*
     @param tooltip : tooltip text
 */
@@ -11,12 +11,13 @@ const IconBtn = ({ tooltipText, tooltipPosition = 'top', isActive, children, ...
       setTooltipVisible(!tooltipVisible);
     }
 
-    const iconStyles = classnames('flex justify-center items-center w-10 h-10 cursor-pointer px-2 ml-1 text-gray-500 hover:bg-gray-200 focus:bg-gray-200 rounded-lg ', 
+    const iconStyles = classnames(styles.icon, 'flex', 'justify-center', 'items-center', 'w-10', 'h-10', 'cursor-pointer', 'px-2', 'ml-1', 'text-gray-500', 'hover:bg-gray-200', 'focus:bg-gray-200', 'rounded-lg', 'first:w-full', 'first:h-full', 
     {
         ['bg-gray-200']: isActive,
     });
 
-    const tooltipStyles = classnames('absolute text-xs text-white w-auto whitespace-nowrap bg-gray-800 shadow-sm p-2 rounded-md', {
+    const tooltipStyles = classnames('absolute', 'text-xs', 'text-white', 'w-auto', 'whitespace-nowrap', 'bg-gray-800', 'shadow-sm', 'p-2', 'rounded-md', 
+    {
         ['block']: tooltipVisible,
         ['hidden']: !tooltipVisible,
         ['-mt-20 ']: tooltipPosition == 'top', //default tooltip to top
