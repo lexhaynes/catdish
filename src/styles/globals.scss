@@ -1,20 +1,7 @@
-// bootstrap - required
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
-
-//bootstrap navbar
-@import "node_modules/bootstrap/scss/navbar";
-@import "node_modules/bootstrap/scss/dropdown";
-@import "node_modules/bootstrap/scss/transitions";
-
-//bootstrap button
-//@import "node_modules/bootstrap/scss/buttons";
-
 //tailwind required
-@import "~tailwindcss/base";
-@import "~tailwindcss/components";
-@import "~tailwindcss/utilities";
+@use "~tailwindcss/base";
+@use "~tailwindcss/components";
+@use "~tailwindcss/utilities";
 
 //global styles here
 
