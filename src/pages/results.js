@@ -160,7 +160,7 @@ const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCoun
                 {/* LEFT SIDE OF CARD */}
                   <div className="card-left">
                     <p className="font-bold text-xl mb-1">{brand}</p>
-                    <p className="text-lg mb-1">{product_line}</p>
+                    <p className="text-lg mb-1 font-semibold text-red-400">{product_line}</p>
                     <p className="italic mb-3">{flavor}</p>
                     <p className="mb-6 px-3 py-1 rounded-2xl bg-red-100 inline-block text-sm">      
                       {texture}
