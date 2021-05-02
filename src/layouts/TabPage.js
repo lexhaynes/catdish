@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import AppShell from '@layouts/AppShell'
 import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
-import Navbar from '@components/Navbar'
+import NavBar from '@components/NavBar'
 import navData from '@data/nav.json'
 
 const TabPage = ({ title, children }) => {
@@ -31,7 +31,7 @@ const TabPage = ({ title, children }) => {
             {/* Tab View Section */ }           
              <section className="mx-auto h-full">
      
-               <Navbar activeTab={activeTab} tabs={tabs} />
+               <NavBar activeTab={activeTab} tabs={tabs} />
 
                 <div className="overflow-hidden">       
                     <article className={`relative mb-10 py-6 mx-auto bg-red-400 z-20`}>

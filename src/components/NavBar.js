@@ -14,7 +14,7 @@ import styles from '@styles/TabPage.module.scss'
 
 //@links is a list of links
 //@tablist is a TabLsit component
-const Navbar = ({ activeTab, tabs }) => {
+const NavBar = ({ activeTab, tabs }) => {
     const [ filtersDropped, setFiltersDropped ] = useState(false);
     const toggleFilters = () => setFiltersDropped(!filtersDropped);
     const router = useRouter();
@@ -91,11 +91,11 @@ const Navbar = ({ activeTab, tabs }) => {
                     ))
                 }
             </div>
-            : ''
+            : '' 
         }
     </>
     )
 }
   
 
-export default Navbar
+export default NavBar

@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import AppShell from '@layouts/AppShell'
-import Navbar from '@components/Navbar'
+import NavBar from '@components/NavBar'
 import nav from '@data/nav.json'
 
  const Home = () => {
   return (
     <AppShell title="Home">
     
-    <Navbar />
+    <NavBar />
 
     <div className="container w-full lg:w-5/6 mx-auto mt-12 md:flex justify-between">
 
