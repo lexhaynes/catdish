@@ -22,7 +22,7 @@ const NavBar = ({ activeTab, tabs }) => {
 
     return (
     <>
-      <header className={classnames('w-full', 'z-40', 'bg-white', 'py-1 px-3', 'flex', 'md:items-center',
+      <header className={classnames('w-full', 'z-40', 'bg-white', 'pt-3 px-3 pb-1', 'md:py-1', 'flex', 'md:items-center',
           {
               [styles.border + ' sticky top-0'] : tabs, //if navbar includes fulter tabs, add these styles
               ['h-16'] : !tabs
