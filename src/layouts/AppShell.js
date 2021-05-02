@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Footer from '@components/Footer'
 import styles from '@styles/AppShell.module.scss'
 
-const AppShell = ({ title, navbar, children }) => {
+const AppShell = ({ title, children }) => {
 
   return (
     <div className={`${styles.background} ${styles['sans-serif-text']} text-gray-700`}>
