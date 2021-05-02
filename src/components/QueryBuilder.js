@@ -39,7 +39,7 @@ const Heading = ({category}) => {
 
 const SearchBar = ({searchInput, handleChange}) => {
     return (
-     <div className="relative my-6 text-gray-600 h-10 w-1/2">
+     <div className="relative my-6 text-gray-600 h-10 w-full md:w-1/2">
         <input className="border border-gray-400 bg-white w-full h-full px-4 rounded-lg text-sm focus:outline-none focus:border-red-400 focus:border-2"
           name="search" 
           placeholder={`Search the filters`} 
