@@ -97,5 +97,4 @@ const NavBar = ({ activeTab, tabs }) => {
     )
 }
   
-
 export default NavBar
