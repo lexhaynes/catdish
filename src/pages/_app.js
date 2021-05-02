@@ -1,4 +1,4 @@
-import '@styles/globals.scss'
+import '@styles/globals.css'
 import { SelectedFiltersProvider } from '@context/selectedFilters'
 
 
