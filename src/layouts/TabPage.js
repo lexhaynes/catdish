@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import AppShell from '@layouts/AppShell'
-import SelectedFilterDisplay from '@components/SelectedFilterDisplay'
+import SelectedFiltersDisplay from '@components/SelectedFiltersDisplay'
 import NavBar from '@components/NavBar'
 import navData from '@data/nav.json'
 
@@ -36,7 +36,7 @@ const TabPage = ({ title, children }) => {
                 <div className="overflow-hidden">       
                     <article className={`relative mb-10 py-6 mx-auto bg-red-400 z-20`}>
                         <div className="w-11/12 lg:w-2/3 mx-auto">
-                            <SelectedFilterDisplay />
+                            <SelectedFiltersDisplay />
                         </div>
                     </article>
                     {/* attractive blob */}
