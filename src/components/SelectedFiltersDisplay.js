@@ -42,7 +42,7 @@ const FormatBtnLabel = ({category, filter}) => {
   )
 }
 
-const SelectedFilterDisplay = () => {
+const SelectedFiltersDisplay = () => {
     const { readOnlyFilters, filterCount } = useSelectedFiltersState();
     const { deleteFilter, deleteAllFilters } = useSelectedFiltersUpdate();
     
@@ -89,4 +89,4 @@ const SelectedFilterDisplay = () => {
     )
 }
 
-export default SelectedFilterDisplay;
+export default SelectedFiltersDisplay;
