@@ -344,7 +344,7 @@ const GroupBy = ({groupResults}) => {
 
 const ResultsCountHeader = ({count, offset}) => {
   return (
-    <div className="w-1/3 text-right">
+    <div className="w-full md:w-1/3 text-right">
       <p>Displaying <strong>{count < offset ? count : offset}</strong> of <strong>{count}</strong> {`match${count === 1 ? '' : 'es'}`}</p>
     </div>
   )
