@@ -160,7 +160,7 @@ const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCoun
                 {/* LEFT SIDE OF CARD */}
                   <div className="card-left">
                     <p className="font-bold text-xl mb-1">{brand}</p>
-                    <p className="text-lg mb-1 font-semibold text-red-400">{product_line}</p>
+                    <p className="text-lg mb-1 font-semibold">{product_line}</p>
                     <p className="italic mb-3">{flavor}</p>
                     <p className="mb-6 px-3 py-1 rounded-2xl bg-red-100 inline-block text-sm">      
                       {texture}
@@ -184,8 +184,8 @@ const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCoun
                                 {/* inner wrapper specifically for bg on hover */}
                                 <div className="flex justify-end items-center cursor-pointer rounded-md hover:bg-gray-200 transition px-3" 
                                      onClick={() => toggleIngredients(_id)}>
-                                  <span className="font-semibold pr-2">See Ingredients</span>
-                                    <p className="w-8 h-8 p-1">
+                                  <span className="font-semibold pr-2 text-red-400">See Ingredients</span>
+                                    <p className="w-8 h-8 p-1 text-red-400">
                                         <PlusCircleIcon />
                                     </p>
                                 </div>
