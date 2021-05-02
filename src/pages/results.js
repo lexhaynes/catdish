@@ -125,7 +125,7 @@ const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCoun
     })
   );
 
-  const gridItemClasses = classnames('GRID', 'border',  'border-gray-100', 'mb-6 p-4', 'rounded-md');
+  const gridItemClasses = classnames('GRID', 'mb-6 p-4', 'rounded-lg', 'shadow-md');
   const listItemClasses = classnames('LIST', 'p-4', 'mb-2', 'rounded-md', 'md:justify-between', 'md:flex-row');
 
   //compose resultsData item  styles based on viewType (grid or list)
@@ -158,7 +158,7 @@ const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCoun
 
         
                 {/* LEFT SIDE OF CARD */}
-                  <div className="card-left border border-red-500">
+                  <div className="card-left">
                     <p className="font-bold text-xl mb-1">{brand}</p>
                     <p className="text-lg mb-1">{product_line}</p>
                     <p className="italic mb-3">{flavor}</p>
@@ -168,7 +168,7 @@ const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCoun
                   </div>
 
                   {/* RIGHT SIDE OF CARD  */}
-                    <div className="card-right border border-blue-500 w-full md:w-1/2 items-end relative">
+                    <div className={`card-right w-full ${displayType === "list" ? 'md:w-1/2' : ''} md:items-end relative`}>
                         {
                           ingredientsShowing.indexOf(_id) > -1 
                             ? <div className="inline-flex justify-end items-start">
@@ -180,7 +180,7 @@ const ResultsDisplay = ({data, ingredients, sortResults, groupResults, totalCoun
                             </div>
                               
                               
-                            : <div className="flex justify-end items-center">
+                            : <div className={`flex ${displayType === "list" ? 'md:justify-end' : ''} items-center`}>
                                 {/* inner wrapper specifically for bg on hover */}
                                 <div className="flex justify-end items-center cursor-pointer rounded-md hover:bg-gray-200 transition px-3" 
                                      onClick={() => toggleIngredients(_id)}>
