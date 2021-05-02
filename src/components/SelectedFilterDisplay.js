@@ -6,7 +6,6 @@ import {
 } from '@context/selectedFilters'
 
 
-
 //format the language on the filter button label
 const FormatBtnLabel = ({category, filter}) => {
   let subject = '';
@@ -43,7 +42,7 @@ const FormatBtnLabel = ({category, filter}) => {
   )
 }
 
-const SelectedFiltersDisplay = () => {
+const SelectedFilterDisplay = () => {
     const { readOnlyFilters, filterCount } = useSelectedFiltersState();
     const { deleteFilter, deleteAllFilters } = useSelectedFiltersUpdate();
     
@@ -90,4 +89,4 @@ const SelectedFiltersDisplay = () => {
     )
 }
 
-export default SelectedFiltersDisplay;
+export default SelectedFilterDisplay;
