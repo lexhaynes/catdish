@@ -24,7 +24,7 @@ import nav from '@data/nav.json'
     </div>
       
       {/* RIGHT SIDE - LINKS */}
-      <div className="container md:w-1/2 text-center table bg-gray-100 p-6 rounded-2xl">
+      <div className="container md:w-1/2 text-center table p-6 rounded-2xl">
         <div className="desc-text w-full">
           <p className="font-bold">Start with one of the filter groups below</p>
           <p className="italic">You will be able to access all filter groups.</p>
