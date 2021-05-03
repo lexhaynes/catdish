@@ -15,6 +15,8 @@ import lang from 'lodash/lang'
 const headingStyles = "text-2xl font-bold mb-2";
 const subheadStyles = "text-md font-medium";
 
+/* TODO: split up this file */
+
 //format the language on the filter button label
 const Heading = ({category}) => {
 
