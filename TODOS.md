@@ -8,7 +8,7 @@
 - rewrite DB queries
 - styling
 - add logged-in UI
-- add data-entry form for users
+- add data-entry form for users (add new Brand, add new Ingredient, add photo, add link, etc )
 - branding / visual identity
 - catchier name maybe?
 - add feature request form for the cat people?
