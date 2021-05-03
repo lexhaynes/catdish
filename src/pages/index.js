@@ -10,7 +10,7 @@ import nav from '@data/nav.json'
     
     <NavBar />
 
-    <div className="container w-full lg:w-5/6 mx-auto mt-12 md:flex justify-between">
+    <div className="container w-full lg:w-2/3 mx-auto mt-12 md:flex justify-between">
 
     {/* LEFT SIDE - text */}
     <div className="p-6 md:w-1/2 space-y-4">
@@ -35,7 +35,7 @@ import nav from '@data/nav.json'
             nav.filter(item => item.name !== "home" && item.name !== "results").map((item, i) => (
               <Link key={`nav-link_${i}`} href={item.path}>
                 <a>
-                  <div  className="w-full h-12 md:w-36 md:h-36 lg:w-44 lg:h-44 my-2 mx-auto text-white md:text-lg lg:text-2xl bg-red-400 shadow-sm rounded-full md:rounded-2xl cursor-pointer transition transform hover:scale-90 hover:bg-red-300 active:bg-red-200 flex justify-center items-center">
+                  <div  className="w-full h-12 md:w-36 md:h-36 my-2 mx-auto text-white md:text-lg lg:text-2xl bg-red-400 shadow-sm rounded-full md:rounded-2xl cursor-pointer transition transform hover:scale-90 hover:bg-red-300 active:bg-red-200 flex justify-center items-center">
                       {item.displayName}
                   </div>
                 </a>
